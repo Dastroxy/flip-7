@@ -95,18 +95,21 @@ export default function Game() {
         padding: '0.75rem', overflow: 'hidden', minHeight: 0,
       }}>
 
-        {/* Player zones — takes ~half width on desktop, full on mobile */}
+        {/* Player zones */}
         <div style={{
           flex: 1, overflowY: 'auto',
           WebkitOverflowScrolling: 'touch',
           minWidth: 0,
         }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 220px), 1fr))',
-            gap: '0.75rem',
-            alignContent: 'flex-start',
-          }}>
+          <div
+            className="player-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 220px), 1fr))',
+              gap: '0.75rem',
+              alignContent: 'flex-start',
+            }}
+          >
             {order.map(uid => (
               <PlayerZone
                 key={uid}
@@ -118,7 +121,7 @@ export default function Game() {
           </div>
         </div>
 
-        {/* Right sidebar — exactly half screen width, max 240px */}
+        {/* Right sidebar (scoreboard) */}
         <div style={{
           width: 'clamp(130px, 35%, 200px)',
           flexShrink: 0,
@@ -149,60 +152,109 @@ export default function Game() {
           💬 {room.lastEvent}
         </div>
 
-        {/* Buttons */}
+        {/* Buttons / status */}
         <div style={{ display: 'flex', gap: '0.6rem', flexShrink: 0, alignItems: 'center' }}>
           {room.phase === 'player_turn' && (
             isMyTurn ? (
               <>
-                <button className="btn-hit" onClick={handleHit} disabled={!canHit}
-                  style={{ minWidth: '80px', minHeight: '44px', fontSize: '0.95rem' }}>
+                <button
+                  className="btn-hit"
+                  onClick={handleHit}
+                  disabled={!canHit}
+                  style={{ minWidth: '80px', minHeight: '44px', fontSize: '0.95rem' }}
+                >
                   {processing ? '⏳' : '🃏'} HIT
                 </button>
-                <button className="btn-danger" onClick={handleStay} disabled={!canStay}
-                  style={{ minWidth: '80px', minHeight: '44px', fontSize: '0.95rem' }}>
+                <button
+                  className="btn-danger"
+                  onClick={handleStay}
+                  disabled={!canStay}
+                  style={{ minWidth: '80px', minHeight: '44px', fontSize: '0.95rem' }}
+                >
                   ✋ STAY
                 </button>
               </>
             ) : (
-              <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '0.5rem 0.9rem', fontSize: '0.82rem', color: 'var(--den-muted)', fontWeight: 600 }}>
+              <div style={{
+                background: 'rgba(255,255,255,0.04)',
+                borderRadius: '10px',
+                padding: '0.5rem 0.9rem',
+                fontSize: '0.82rem',
+                color: 'var(--den-muted)',
+                fontWeight: 600,
+              }}>
                 ⏳ {room.players[activeUid]?.name}'s turn...
               </div>
             )
           )}
 
           {room.phase === 'dealing' && (
-            <div style={{ background: 'rgba(245,197,66,0.08)', borderRadius: '10px', padding: '0.5rem 0.9rem', color: 'var(--den-gold)', fontSize: '0.82rem', fontWeight: 700 }}>
+            <div style={{
+              background: 'rgba(245,197,66,0.08)',
+              borderRadius: '10px',
+              padding: '0.5rem 0.9rem',
+              color: 'var(--den-gold)',
+              fontSize: '0.82rem',
+              fontWeight: 700,
+            }}>
               🃏 Dealing...
             </div>
           )}
 
           {room.phase === 'action_resolve' && room.pendingAction &&
             room.pendingAction.sourcePlayerId !== myUid && (
-            <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '0.5rem 0.9rem', fontSize: '0.82rem', color: 'var(--den-muted)', fontWeight: 600 }}>
+            <div style={{
+              background: 'rgba(255,255,255,0.04)',
+              borderRadius: '10px',
+              padding: '0.5rem 0.9rem',
+              fontSize: '0.82rem',
+              color: 'var(--den-muted)',
+              fontWeight: 600,
+            }}>
               ⏳ {room.players[room.pendingAction.sourcePlayerId]?.name} is resolving...
             </div>
           )}
 
           {room.phase === 'round_end' && isHost && (
-            <button className="btn-primary" onClick={startNextRound}
-              style={{ minHeight: '44px', padding: '0 1.25rem', fontSize: '0.95rem' }}>
+            <button
+              className="btn-primary"
+              onClick={startNextRound}
+              style={{ minHeight: '44px', padding: '0 1.25rem', fontSize: '0.95rem' }}
+            >
               ▶ Next Round
             </button>
           )}
           {room.phase === 'round_end' && !isHost && (
-            <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '0.5rem 0.9rem', color: 'var(--den-muted)', fontSize: '0.82rem', fontWeight: 600 }}>
+            <div style={{
+              background: 'rgba(255,255,255,0.04)',
+              borderRadius: '10px',
+              padding: '0.5rem 0.9rem',
+              color: 'var(--den-muted)',
+              fontSize: '0.82rem',
+              fontWeight: 600,
+            }}>
               ⏳ Waiting for host...
             </div>
           )}
 
           {room.phase === 'game_over' && isHost && (
-            <button className="btn-primary" onClick={startGame}
-              style={{ minHeight: '44px', padding: '0 1.25rem', fontSize: '0.95rem' }}>
+            <button
+              className="btn-primary"
+              onClick={startGame}
+              style={{ minHeight: '44px', padding: '0 1.25rem', fontSize: '0.95rem' }}
+            >
               🔄 Play Again
             </button>
           )}
           {room.phase === 'game_over' && !isHost && (
-            <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '0.5rem 0.9rem', color: 'var(--den-muted)', fontSize: '0.82rem', fontWeight: 600 }}>
+            <div style={{
+              background: 'rgba(255,255,255,0.04)',
+              borderRadius: '10px',
+              padding: '0.5rem 0.9rem',
+              color: 'var(--den-muted)',
+              fontSize: '0.82rem',
+              fontWeight: 600,
+            }}>
               ⏳ Waiting for host...
             </div>
           )}
