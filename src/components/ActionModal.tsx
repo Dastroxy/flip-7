@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { GameRoom } from '../types/game';
 
 interface Props {
@@ -18,15 +19,56 @@ export default function ActionModal({ room, myUid, onResolve }: Props) {
     emoji: '🎴', title: 'ACTION CARD', color: '#f5c542', desc: 'Resolve this card.',
   };
 
+  const [minimised, setMinimised] = useState(false);
+
   const canResolve = pa.sourcePlayerId === myUid;
 
-  // All three actions can target any active player including yourself
   const validTargets = room.playerOrder
     .map(uid => room.players[uid])
     .filter(p => p && p.status === 'active');
 
   const noTargets = validTargets.length === 0;
 
+  // ── Minimised pill ──────────────────────────────────────────────────────
+  if (minimised) {
+    return (
+      <div style={{
+        position: 'fixed', bottom: 'max(5rem, calc(env(safe-area-inset-bottom) + 5rem))',
+        left: '50%', transform: 'translateX(-50%)',
+        zIndex: 1000,
+      }}>
+        <button
+          onClick={() => setMinimised(false)}
+          style={{
+            background: 'rgba(22,22,40,0.97)',
+            border: `2px solid ${info.color}`,
+            borderRadius: '50px',
+            padding: '0.55rem 1.2rem',
+            display: 'flex', alignItems: 'center', gap: '0.55rem',
+            cursor: 'pointer',
+            boxShadow: `0 0 20px ${info.color}55`,
+            color: '#fff',
+            fontFamily: 'Nunito, sans-serif',
+            fontWeight: 800,
+            fontSize: '0.9rem',
+            animation: 'pulseSlow 1.8s ease-in-out infinite',
+          }}
+        >
+          <span style={{ fontSize: '1.2rem' }}>{info.emoji}</span>
+          <span style={{ color: info.color }}>{info.title}</span>
+          <span style={{
+            background: info.color, color: '#1a1a2e',
+            borderRadius: '20px', padding: '0.1rem 0.55rem',
+            fontSize: '0.72rem', fontWeight: 900,
+          }}>
+            TAP TO RESOLVE
+          </span>
+        </button>
+      </div>
+    );
+  }
+
+  // ── Full modal ──────────────────────────────────────────────────────────
   return (
     <div style={{
       position: 'fixed', inset: 0,
@@ -43,7 +85,28 @@ export default function ActionModal({ room, myUid, onResolve }: Props) {
         maxWidth: '420px', width: '100%',
         textAlign: 'center',
         boxShadow: `0 0 40px ${info.color}44`,
+        position: 'relative',
       }}>
+
+        {/* Minimise button — all players */}
+        <button
+          onClick={() => setMinimised(true)}
+          title="Minimise to inspect player cards"
+          style={{
+            position: 'absolute', top: '0.9rem', right: '0.9rem',
+            background: 'rgba(255,255,255,0.06)',
+            border: '1px solid rgba(255,255,255,0.15)',
+            borderRadius: '8px',
+            color: 'var(--den-muted)',
+            fontSize: '0.75rem', fontWeight: 800,
+            padding: '0.3rem 0.6rem',
+            cursor: 'pointer',
+            lineHeight: 1,
+          }}
+        >
+          ↙ Inspect
+        </button>
+
         <div style={{ fontSize: '4rem', marginBottom: '0.5rem' }}>{info.emoji}</div>
         <h2 style={{ fontSize: '1.6rem', color: info.color, marginBottom: '0.5rem' }}>
           {info.title}
