@@ -11,6 +11,10 @@ import type { GameRoom, PlayerState } from '../types/game';
 import { buildDeck, shuffle } from '../lib/deck';
 import { calculateHandScore, hasFlip7 } from '../lib/scoring';
 
+function appendEvent(existing: string[] | undefined, msg: string): string[] {
+  return [...(existing ?? []).slice(-5), msg];
+}
+
 function generateRoomCode(): string {
   return Math.random().toString(36).substring(2, 7).toUpperCase();
 }
@@ -23,6 +27,7 @@ function dealIntoTransaction(r: GameRoom): {
   pendingAction: any;
   currentTurnIndex: number;
   lastEvent: string;
+  recentEvents: string[];
 } | null {
   let deck = [...r.deck];
   let discard = [...r.discard];
@@ -85,6 +90,7 @@ function dealIntoTransaction(r: GameRoom): {
         pendingAction,
         currentTurnIndex: uidIndex,
         lastEvent,
+        recentEvents: appendEvent(r.recentEvents, lastEvent),
       };
     }
   }
@@ -99,12 +105,14 @@ function dealIntoTransaction(r: GameRoom): {
     tries++;
   }
 
+  const finalEvent = lastEvent || 'Cards dealt! Player turns begin.';
   return {
     deck, discard, players,
     phase: 'player_turn',
     pendingAction: null,
     currentTurnIndex,
-    lastEvent: lastEvent || 'Cards dealt! Player turns begin.',
+    lastEvent: finalEvent,
+    recentEvents: appendEvent(r.recentEvents, finalEvent),
   };
 }
 
@@ -128,6 +136,7 @@ export function useGameRoom(roomCode: string | null) {
   const createRoom = useCallback(async (hostName: string): Promise<string> => {
     if (!myUid) throw new Error('Not authenticated');
     const code = generateRoomCode();
+    const msg = `${hostName} created the room.`;
     const hostPlayer: PlayerState = {
       uid: myUid,
       name: hostName,
@@ -153,7 +162,8 @@ export function useGameRoom(roomCode: string | null) {
       pendingAction: null,
       round: 0,
       winnerUid: null,
-      lastEvent: `${hostName} created the room.`,
+      lastEvent: msg,
+      recentEvents: [msg],
       createdAt: Date.now(),
     };
     await setDoc(doc(db, 'rooms', code), newRoom);
@@ -169,9 +179,11 @@ export function useGameRoom(roomCode: string | null) {
       if (!snap.exists()) throw new Error('Room not found');
       const r = snap.data() as GameRoom;
       if (r.playerOrder.includes(myUid)) {
+        const msg = `${playerName} reconnected.`;
         tx.update(ref, {
           [`players.${myUid}.name`]: playerName,
-          lastEvent: `${playerName} reconnected.`,
+          lastEvent: msg,
+          recentEvents: appendEvent(r.recentEvents, msg),
         });
         return;
       }
@@ -187,10 +199,12 @@ export function useGameRoom(roomCode: string | null) {
         totalScore: 0,
         isDealer: false,
       };
+      const msg = `${playerName} joined the room.`;
       tx.update(ref, {
         [`players.${myUid}`]: newPlayer,
         playerOrder: [...r.playerOrder, myUid],
-        lastEvent: `${playerName} joined the room.`,
+        lastEvent: msg,
+        recentEvents: appendEvent(r.recentEvents, msg),
       });
     });
   }, [myUid]);
@@ -217,10 +231,13 @@ export function useGameRoom(roomCode: string | null) {
           isDealer: i === 0,
         };
       });
+      const startMsg = 'Game started! Dealing cards...';
       const dealingState: GameRoom = {
         ...r, phase: 'dealing', deck, discard: [], players,
         dealerIndex: 0, currentTurnIndex: 0, pendingAction: null,
-        round: 1, winnerUid: null, lastEvent: 'Game started! Dealing cards...',
+        round: 1, winnerUid: null,
+        lastEvent: startMsg,
+        recentEvents: appendEvent(r.recentEvents, startMsg),
       };
       const dealt = dealIntoTransaction(dealingState);
       if (!dealt) return;
@@ -228,7 +245,9 @@ export function useGameRoom(roomCode: string | null) {
         deck: dealt.deck, discard: dealt.discard, players: dealt.players,
         dealerIndex: 0, currentTurnIndex: dealt.currentTurnIndex,
         pendingAction: dealt.pendingAction, phase: dealt.phase,
-        round: 1, winnerUid: null, lastEvent: dealt.lastEvent,
+        round: 1, winnerUid: null,
+        lastEvent: dealt.lastEvent,
+        recentEvents: dealt.recentEvents,
       });
     });
   }, [room, myUid]);
@@ -244,7 +263,6 @@ export function useGameRoom(roomCode: string | null) {
       const newDealerIndex = (r.dealerIndex + 1) % order.length;
       const newDeck = [...r.deck];
 
-      // ✅ Collect all remaining hand cards (stayed/frozen players) into discard
       const handCards = order.flatMap((uid) => [
         ...(r.players[uid].numberCards ?? []),
         ...(r.players[uid].modifierCards ?? []),
@@ -261,12 +279,14 @@ export function useGameRoom(roomCode: string | null) {
           isDealer: i === newDealerIndex,
         };
       });
+      const roundMsg = `Round ${r.round + 1} — ${players[order[newDealerIndex]].name} is dealer.`;
       const dealingState: GameRoom = {
         ...r, phase: 'dealing', deck: newDeck, discard: newDiscard, players,
         dealerIndex: newDealerIndex,
         currentTurnIndex: (newDealerIndex + 1) % order.length,
         pendingAction: null, round: r.round + 1,
-        lastEvent: `Round ${r.round + 1} — ${players[order[newDealerIndex]].name} is dealer.`,
+        lastEvent: roundMsg,
+        recentEvents: appendEvent(r.recentEvents, roundMsg),
       };
       const dealt = dealIntoTransaction(dealingState);
       if (!dealt) return;
@@ -275,7 +295,9 @@ export function useGameRoom(roomCode: string | null) {
         dealerIndex: newDealerIndex,
         currentTurnIndex: dealt.currentTurnIndex,
         pendingAction: dealt.pendingAction, phase: dealt.phase,
-        round: r.round + 1, winnerUid: null, lastEvent: dealt.lastEvent,
+        round: r.round + 1, winnerUid: null,
+        lastEvent: dealt.lastEvent,
+        recentEvents: dealt.recentEvents,
       });
     });
   }, [room, myUid]);
@@ -307,7 +329,6 @@ export function useGameRoom(roomCode: string | null) {
         let winnerUid = r.winnerUid;
         let currentTurnIndex = r.currentTurnIndex;
 
-        // Guard: empty deck — reshuffle discard or force stay
         if (deck.length === 0) {
           if (discard.length > 0) {
             deck = shuffle([...discard]);
@@ -337,9 +358,11 @@ export function useGameRoom(roomCode: string | null) {
               phase = winner ? 'game_over' : 'round_end';
               winnerUid = winner ?? null;
             }
+            const msg = `Deck empty — ${player.name} forced to stay with ${rs} pts.`;
             tx.update(ref, {
               deck, discard, players, phase, pendingAction: null,
-              lastEvent: `Deck empty — ${player.name} forced to stay with ${rs} pts.`,
+              lastEvent: msg,
+              recentEvents: appendEvent(r.recentEvents, msg),
               currentTurnIndex, winnerUid,
             });
             return;
@@ -395,6 +418,7 @@ export function useGameRoom(roomCode: string | null) {
               tx.update(ref, {
                 deck, discard, players, phase, pendingAction: null,
                 lastEvent, winnerUid, currentTurnIndex,
+                recentEvents: appendEvent(r.recentEvents, lastEvent),
               });
               return;
             }
@@ -437,6 +461,7 @@ export function useGameRoom(roomCode: string | null) {
         tx.update(ref, {
           deck, discard, players, phase, pendingAction,
           lastEvent, currentTurnIndex, winnerUid,
+          recentEvents: appendEvent(r.recentEvents, lastEvent),
         });
       });
     } finally {
@@ -488,9 +513,11 @@ export function useGameRoom(roomCode: string | null) {
           phase = winner ? 'game_over' : 'round_end';
           winnerUid = winner ?? null;
         }
+        const msg = `${players[myUid].name} stayed with ${rs} pts this round.`;
         tx.update(ref, {
           players, phase, currentTurnIndex, winnerUid,
-          lastEvent: `${players[myUid].name} stayed with ${rs} pts this round.`,
+          lastEvent: msg,
+          recentEvents: appendEvent(r.recentEvents, msg),
         });
       });
     } finally {
@@ -649,7 +676,6 @@ export function useGameRoom(roomCode: string | null) {
           currentTurnIndex = advanceTurn(order, players, r.currentTurnIndex);
         }
 
-        // ✅ Move the played action card from source player's hand to discard
         const playedActionCard = players[sourceUid]?.actionCards?.find(
           (c: any) => c.action === pa.action
         );
@@ -664,6 +690,7 @@ export function useGameRoom(roomCode: string | null) {
           deck, discard, players, phase,
           pendingAction: null,
           currentTurnIndex, lastEvent, winnerUid,
+          recentEvents: appendEvent(r.recentEvents, lastEvent),
         });
       });
     } finally {
