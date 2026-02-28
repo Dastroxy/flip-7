@@ -25,7 +25,7 @@ export default function PlayerZone({ player, isActive, isMe }: Props) {
 
   return (
     <div
-      className={isActive ? 'glow-gold' : isBusted ? 'glow-red' : ''}
+      className={`player-zone${isActive ? ' glow-gold' : isBusted ? ' glow-red' : ''}`}
       style={{
         background: isActive
           ? 'rgba(245,197,66,0.07)'
@@ -42,8 +42,6 @@ export default function PlayerZone({ player, isActive, isMe }: Props) {
         padding: '0.9rem 1rem',
         position: 'relative',
         transition: 'border-color 0.3s, box-shadow 0.3s',
-        minWidth: '170px',
-        maxWidth: '260px',
         opacity: isBusted ? 0.65 : 1,
       }}
     >
@@ -149,10 +147,7 @@ export default function PlayerZone({ player, isActive, isMe }: Props) {
       )}
 
       {isStayed && (
-        <div style={{
-          marginTop: '0.5rem', display: 'flex', alignItems: 'center',
-          gap: '0.4rem',
-        }}>
+        <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
           <span style={{
             fontSize: '0.72rem', fontWeight: 800,
             color: player.status === 'frozen' ? 'var(--den-blue)' : 'var(--den-green)',
