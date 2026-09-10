@@ -51,29 +51,55 @@ export default function Landing() {
       {/* ── Logo ── */}
       <div className="float-anim" style={{
         textAlign: 'center',
-        marginBottom: '2rem',
+        marginBottom: '2.25rem',
         width: '100%',
       }}>
-        <div style={{ fontSize: 'clamp(2.5rem, 10vw, 4rem)', marginBottom: '0.5rem' }}>
-          🃏
+        {/* Emblem: stylized 7 card badge */}
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '64px',
+          height: '84px',
+          borderRadius: '12px',
+          background: 'linear-gradient(135deg, #072216, #0e3b27)',
+          border: '2px solid rgba(230,190,104,0.65)',
+          boxShadow: '0 8px 24px rgba(230,190,104,0.25), inset 0 1px 1px rgba(255,255,255,0.2)',
+          marginBottom: '1rem',
+          position: 'relative',
+        }}>
+          <span style={{
+            fontFamily: 'Cinzel, serif',
+            fontSize: '2.5rem',
+            fontWeight: 900,
+            background: 'linear-gradient(135deg,#e6be68,#fef0d2)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            lineHeight: 1,
+          }}>
+            7
+          </span>
         </div>
+
         <h1 style={{
-          fontSize: 'clamp(2rem, 8vw, 3.5rem)',
-          lineHeight: 1.1,
-          background: 'linear-gradient(135deg,#f5c542,#ff9f43)',
+          fontSize: 'clamp(2.4rem, 9vw, 3.8rem)',
+          lineHeight: 1.05,
+          letterSpacing: '0.08em',
+          background: 'linear-gradient(135deg,#e6be68 0%,#dfb15b 50%,#fef0d2 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
         }}>
-          DAX'S DEN
+          FLIP 7
         </h1>
         <p style={{
           color: 'var(--den-muted)',
           marginTop: '0.5rem',
-          fontSize: 'clamp(0.75rem, 3vw, 0.95rem)',
-          letterSpacing: '0.2em',
-          fontWeight: 700,
+          fontSize: 'clamp(0.72rem, 2.5vw, 0.88rem)',
+          letterSpacing: '0.22em',
+          fontWeight: 800,
+          textTransform: 'uppercase',
         }}>
-          GAME NIGHT · YOUR RULES
+          Press-Your-Luck Card Game
         </p>
       </div>
 
@@ -81,42 +107,58 @@ export default function Landing() {
       {mode === 'none' && (
         <div style={{
           width: '100%',
-          maxWidth: '320px',
+          maxWidth: '340px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           gap: '1.25rem',
         }}>
-          {/* Game tile */}
+          {/* Game summary badge */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.75rem',
-            background: 'rgba(255,255,255,0.04)',
+            gap: '0.9rem',
+            background: 'rgba(255,255,255,0.035)',
             border: '1px solid var(--den-border)',
-            borderRadius: '14px',
-            padding: '0.75rem 1.25rem',
+            borderRadius: '16px',
+            padding: '0.85rem 1.25rem',
             width: '100%',
             boxSizing: 'border-box',
           }}>
-            <span style={{ fontSize: '1.5rem' }}>🃏</span>
+            <div style={{
+              width: '38px',
+              height: '50px',
+              borderRadius: '8px',
+              background: 'linear-gradient(135deg,#0d3625,#144f37)',
+              border: '1px solid rgba(230,190,104,0.4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 900,
+              fontSize: '1.2rem',
+              color: 'var(--den-gold)',
+              flexShrink: 0,
+            }}>
+              7
+            </div>
             <div>
-              <div style={{ fontWeight: 800, fontSize: '0.95rem' }}>FLIP 7</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--den-muted)' }}>
-                Press-Your-Luck · 3+ Players
+              <div style={{ fontWeight: 800, fontSize: '0.95rem', letterSpacing: '0.04em' }}>FLIP 7 TABLE</div>
+              <div style={{ fontSize: '0.74rem', color: 'var(--den-muted)', fontWeight: 600 }}>
+                First to 200 · 2+ Players
               </div>
             </div>
             <span style={{
               fontSize: '0.65rem',
-              background: 'rgba(11,232,129,0.15)',
-              color: '#0be881',
+              background: 'rgba(16,185,129,0.15)',
+              color: '#10b981',
               borderRadius: '6px',
-              padding: '0.2rem 0.5rem',
+              padding: '0.2rem 0.55rem',
               fontWeight: 800,
               marginLeft: 'auto',
               flexShrink: 0,
+              letterSpacing: '0.05em',
             }}>
-              LIVE
+              READY
             </span>
           </div>
 
@@ -129,17 +171,17 @@ export default function Landing() {
           }}>
             <button
               className="btn-primary"
-              style={{ width: '100%', fontSize: '1.05rem', padding: '0.9rem' }}
+              style={{ width: '100%', fontSize: '1rem', padding: '0.9rem' }}
               onClick={() => setMode('host')}
             >
-              🏠 Host a Game
+              Host a Game
             </button>
             <button
               className="btn-secondary"
-              style={{ width: '100%', fontSize: '1.05rem', padding: '0.85rem' }}
+              style={{ width: '100%', fontSize: '1rem', padding: '0.85rem' }}
               onClick={() => setMode('join')}
             >
-              🚀 Join a Game
+              Join a Game
             </button>
           </div>
         </div>
@@ -154,10 +196,11 @@ export default function Landing() {
         }}>
           <h2 style={{
             marginBottom: '1.5rem',
-            fontSize: '1.4rem',
+            fontSize: '1.35rem',
             textAlign: 'center',
+            letterSpacing: '0.05em',
           }}>
-            {mode === 'host' ? '🏠 Host a Game' : '🚀 Join a Game'}
+            {mode === 'host' ? 'Host a Game' : 'Join a Game'}
           </h2>
 
           {error && (
@@ -172,7 +215,7 @@ export default function Landing() {
               fontWeight: 600,
               textAlign: 'center',
             }}>
-              ⚠️ {error}
+              {error}
             </div>
           )}
 
@@ -192,7 +235,7 @@ export default function Landing() {
               value={name}
               maxLength={20}
               onChange={e => { setName(e.target.value); setError(''); }}
-              placeholder={mode === 'host' ? 'Dax' : 'Your name'}
+              placeholder={mode === 'host' ? 'Host name' : 'Your name'}
               onKeyDown={e => e.key === 'Enter' && (mode === 'host' ? handleHost() : handleJoin())}
             />
           </div>
@@ -231,14 +274,14 @@ export default function Landing() {
             onClick={mode === 'host' ? handleHost : handleJoin}
             disabled={loading}
           >
-            {loading ? '⏳ Please wait...' : mode === 'host' ? 'Create Room →' : 'Join Room →'}
+            {loading ? 'Please wait...' : mode === 'host' ? 'Create Room' : 'Join Room'}
           </button>
           <button
             className="btn-secondary"
             style={{ width: '100%' }}
             onClick={() => { setMode('none'); setError(''); }}
           >
-            ← Back
+            Back
           </button>
         </div>
       )}

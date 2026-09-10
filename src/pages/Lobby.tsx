@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGameRoom } from '../hooks/useGameRoom';
 
@@ -16,6 +16,7 @@ export default function Lobby() {
   const { roomCode } = useParams<{ roomCode: string }>();
   const navigate = useNavigate();
   const { room, myUid, startGame } = useGameRoom(roomCode ?? null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (
@@ -34,7 +35,13 @@ export default function Lobby() {
         alignItems: 'center', justifyContent: 'center',
         gap: '1rem', color: 'var(--den-muted)',
       }}>
-        <div style={{ fontSize: '3rem' }}>🃏</div>
+        <div style={{
+          width: '36px', height: '36px',
+          border: '3px solid rgba(230,190,104,0.25)',
+          borderTopColor: 'var(--den-gold)',
+          borderRadius: '50%',
+          animation: 'spin 0.8s linear infinite',
+        }} />
         <span>Loading room...</span>
       </div>
     );
@@ -53,7 +60,8 @@ export default function Lobby() {
       document.execCommand('copy');
       document.body.removeChild(el);
     });
-    alert(`Copied! Share this with friends:\n\n${shareUrl}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
   }
 
   async function handleStart() {
@@ -70,34 +78,54 @@ export default function Lobby() {
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '0.4rem' }}>🃏</div>
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '48px',
+            height: '62px',
+            borderRadius: '10px',
+            background: 'linear-gradient(135deg, #072216, #0e3b27)',
+            border: '2px solid rgba(230,190,104,0.5)',
+            marginBottom: '0.75rem',
+          }}>
+            <span style={{
+              fontFamily: 'Cinzel, serif',
+              fontSize: '1.8rem',
+              fontWeight: 900,
+              color: 'var(--den-gold)',
+            }}>
+              7
+            </span>
+          </div>
           <h1 style={{
-            fontSize: '2rem',
-            background: 'linear-gradient(135deg,#f5c542,#ff9f43)',
+            fontSize: '1.85rem',
+            letterSpacing: '0.06em',
+            background: 'linear-gradient(135deg,#e6be68,#dfb15b)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
           }}>
-            DAX'S DEN
+            FLIP 7
           </h1>
-          <p style={{ color: 'var(--den-muted)', fontSize: '0.85rem', marginTop: '0.25rem', fontWeight: 600, letterSpacing: '0.1em' }}>
-            FLIP 7 · LOBBY
+          <p style={{ color: 'var(--den-muted)', fontSize: '0.8rem', marginTop: '0.25rem', fontWeight: 700, letterSpacing: '0.15em' }}>
+            GAME LOBBY
           </p>
         </div>
 
         {/* Room code */}
         <div style={{
-          background: 'rgba(245,197,66,0.07)',
-          border: '2px dashed rgba(245,197,66,0.4)',
+          background: 'rgba(245,197,66,0.06)',
+          border: '1.5px dashed rgba(245,197,66,0.4)',
           borderRadius: '16px', padding: '1.1rem',
           textAlign: 'center', marginBottom: '1.5rem',
         }}>
-          <p style={{ fontSize: '0.72rem', color: 'var(--den-muted)', letterSpacing: '0.15em', marginBottom: '0.3rem', fontWeight: 700 }}>
+          <p style={{ fontSize: '0.72rem', color: 'var(--den-muted)', letterSpacing: '0.15em', marginBottom: '0.3rem', fontWeight: 800 }}>
             ROOM CODE
           </p>
           <p style={{
-            fontSize: '2.8rem', fontFamily: 'Cinzel, serif',
+            fontSize: '2.6rem', fontFamily: 'Cinzel, serif',
             background: 'linear-gradient(135deg,#f5c542,#ffe88a)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            letterSpacing: '0.4em', lineHeight: 1.1,
+            letterSpacing: '0.3em', lineHeight: 1.1,
           }}>
             {roomCode}
           </p>
@@ -106,7 +134,7 @@ export default function Lobby() {
             style={{ marginTop: '0.75rem', fontSize: '0.78rem', padding: '0.4rem 1rem' }}
             onClick={copyLink}
           >
-            📋 Copy Invite Link
+            {copied ? 'Copied to Clipboard!' : 'Copy Invite Link'}
           </button>
         </div>
 
@@ -166,12 +194,14 @@ export default function Lobby() {
         </div>
 
         {/* Event log */}
-        <p style={{
-          fontSize: '0.8rem', color: 'var(--den-muted)', fontStyle: 'italic',
-          textAlign: 'center', marginBottom: '1.25rem', fontWeight: 600, minHeight: '1.2em',
-        }}>
-          💬 {room.lastEvent}
-        </p>
+        {room.lastEvent && (
+          <p style={{
+            fontSize: '0.8rem', color: 'var(--den-muted)',
+            textAlign: 'center', marginBottom: '1.25rem', fontWeight: 600, minHeight: '1.2em',
+          }}>
+            {room.lastEvent}
+          </p>
+        )}
 
         {/* Start / waiting */}
         {isHost ? (
@@ -182,8 +212,8 @@ export default function Lobby() {
             disabled={playerList.length < 2}
           >
             {playerList.length < 2
-              ? '⏳ Waiting for at least 1 more player...'
-              : `▶ Start Game  (${playerList.length} players)`}
+              ? 'Waiting for at least 1 more player...'
+              : `Start Game (${playerList.length} players)`}
           </button>
         ) : (
           <div style={{
@@ -192,7 +222,7 @@ export default function Lobby() {
             background: 'rgba(255,255,255,0.03)',
             borderRadius: '12px', fontWeight: 600,
           }}>
-            ⏳ Waiting for host to start the game...
+            Waiting for host to start the game...
           </div>
         )}
       </div>

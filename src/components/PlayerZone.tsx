@@ -28,7 +28,7 @@ export default function PlayerZone({ player, isActive, isMe }: Props) {
       className={`player-zone${isActive ? ' glow-gold' : isBusted ? ' glow-red' : ''}`}
       style={{
         background: isActive
-          ? 'rgba(245,197,66,0.07)'
+          ? 'rgba(230,190,104,0.08)'
           : isMe
           ? 'rgba(255,255,255,0.05)'
           : 'rgba(255,255,255,0.025)',
@@ -91,7 +91,7 @@ export default function PlayerZone({ player, isActive, isMe }: Props) {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '3px' }}>
           {player.isDealer && (
             <span style={{
-              fontSize: '0.6rem', background: 'rgba(245,197,66,0.2)',
+              fontSize: '0.6rem', background: 'rgba(230,190,104,0.2)',
               color: 'var(--den-gold)', borderRadius: '6px',
               padding: '0.15rem 0.45rem', fontWeight: 800, letterSpacing: '0.05em',
             }}>
@@ -99,7 +99,18 @@ export default function PlayerZone({ player, isActive, isMe }: Props) {
             </span>
           )}
           {player.hasSecondChance && (
-            <span title="Has Second Chance" style={{ fontSize: '0.9rem' }}>🍀</span>
+            <span style={{
+              fontSize: '0.62rem',
+              background: 'rgba(5,150,105,0.25)',
+              color: '#10b981',
+              border: '1px solid rgba(16,185,129,0.4)',
+              borderRadius: '6px',
+              padding: '0.15rem 0.45rem',
+              fontWeight: 800,
+              letterSpacing: '0.04em',
+            }}>
+              SHIELD
+            </span>
           )}
         </div>
       </div>
@@ -136,12 +147,16 @@ export default function PlayerZone({ player, isActive, isMe }: Props) {
           pointerEvents: 'none',
         }}>
           <span style={{
-            fontSize: '1.1rem', fontFamily: 'Cinzel, serif',
+            fontSize: '1.15rem', fontFamily: 'Cinzel, serif',
             color: 'var(--den-red)', fontWeight: 900,
-            letterSpacing: '0.1em',
+            letterSpacing: '0.15em',
             textShadow: '0 0 20px rgba(255,77,109,0.8)',
+            border: '2px solid var(--den-red)',
+            padding: '0.35rem 1rem',
+            borderRadius: '10px',
+            background: 'rgba(6,18,12,0.88)',
           }}>
-            💥 BUSTED
+            BUSTED
           </span>
         </div>
       )}
@@ -154,8 +169,9 @@ export default function PlayerZone({ player, isActive, isMe }: Props) {
             background: player.status === 'frozen'
               ? 'rgba(77,159,255,0.15)' : 'rgba(0,230,118,0.12)',
             borderRadius: '8px', padding: '0.2rem 0.6rem',
+            letterSpacing: '0.04em',
           }}>
-            {player.status === 'frozen' ? '🧊 FROZEN' : '✅ STAYED'} — {player.roundScore} pts
+            {player.status === 'frozen' ? 'FROZEN' : 'STAYED'} — {player.roundScore} PTS
           </span>
         </div>
       )}
@@ -163,15 +179,12 @@ export default function PlayerZone({ player, isActive, isMe }: Props) {
       {/* Active turn indicator */}
       {isActive && (
         <div className="animate-pulse-slow" style={{
-          position: 'absolute', top: '-10px', right: '-10px',
-          background: 'linear-gradient(135deg,#f5c542,#ff9f43)',
-          borderRadius: '50%', width: '22px', height: '22px',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '0.7rem', fontWeight: 900, color: '#1a1a2e',
-          boxShadow: '0 2px 8px rgba(245,197,66,0.6)',
-        }}>
-          ▶
-        </div>
+          position: 'absolute', top: '-7px', right: '-7px',
+          background: 'linear-gradient(135deg,#e6be68,#dfb15b)',
+          borderRadius: '50%', width: '16px', height: '16px',
+          boxShadow: '0 0 10px rgba(230,190,104,0.8)',
+          border: '2px solid #06120c',
+        }} />
       )}
     </div>
   );

@@ -17,10 +17,19 @@ export default function App() {
         flexDirection: 'column',
         gap: '1rem',
         color: 'var(--den-muted)',
-        fontSize: '1.1rem',
+        fontSize: '1.05rem',
+        fontWeight: 600,
+        letterSpacing: '0.05em',
       }}>
-        <div style={{ fontSize: '3rem' }}>🃏</div>
-        <span>Loading Dax's Den...</span>
+        <div style={{
+          width: '40px',
+          height: '40px',
+          border: '3px solid rgba(245,197,66,0.2)',
+          borderTopColor: 'var(--den-gold)',
+          borderRadius: '50%',
+          animation: 'spin 0.8s linear infinite',
+        }} />
+        <span>Loading Flip 7...</span>
       </div>
     );
   }

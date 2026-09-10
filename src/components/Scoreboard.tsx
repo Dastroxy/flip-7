@@ -17,7 +17,7 @@ function getAvatarColor(name: string) {
   return avatarColors[Math.abs(hash) % avatarColors.length];
 }
 
-const medals = ['🥇','🥈','🥉'];
+const rankColors = ['#e6be68', '#94a3b8', '#b45309'];
 
 export default function Scoreboard({ room, myUid }: Props) {
   const [showDiscard, setShowDiscard] = useState(false);
@@ -31,7 +31,7 @@ export default function Scoreboard({ room, myUid }: Props) {
   return (
     <>
       <div style={{
-        background: 'rgba(22,22,40,0.95)',
+        background: 'rgba(13, 35, 25, 0.95)',
         border: '1px solid var(--den-border)',
         borderRadius: '16px',
         padding: '0.85rem',
@@ -41,9 +41,9 @@ export default function Scoreboard({ room, myUid }: Props) {
         {/* Header */}
         <h3 style={{
           fontSize: '0.72rem', color: 'var(--den-muted)',
-          letterSpacing: '0.14em', marginBottom: '0.75rem',
+          letterSpacing: '0.14em', marginBottom: '0.75rem', fontWeight: 800,
         }}>
-          🏆 SCOREBOARD
+          SCOREBOARD
         </h3>
 
         {/* Player rows */}
@@ -54,14 +54,20 @@ export default function Scoreboard({ room, myUid }: Props) {
             return (
               <div key={p.uid} style={{
                 background: p.uid === myUid
-                  ? 'rgba(245,197,66,0.08)' : 'rgba(255,255,255,0.03)',
+                  ? 'rgba(230,190,104,0.08)' : 'rgba(255,255,255,0.03)',
                 borderRadius: '10px', padding: '0.4rem 0.6rem',
                 border: p.uid === myUid
-                  ? '1px solid rgba(245,197,66,0.25)' : '1px solid transparent',
+                  ? '1px solid rgba(230,190,104,0.25)' : '1px solid transparent',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '0.8rem', width: '16px', textAlign: 'center' }}>
-                    {medals[i] ?? `${i + 1}`}
+                  <span style={{
+                    fontSize: '0.68rem', width: '18px', height: '18px',
+                    borderRadius: '4px', textAlign: 'center', lineHeight: '18px',
+                    fontWeight: 900,
+                    color: i < 3 ? rankColors[i] : 'var(--den-muted)',
+                    background: i < 3 ? 'rgba(255,255,255,0.06)' : 'transparent',
+                  }}>
+                    {i + 1}
                   </span>
                   <div style={{
                     width: '20px', height: '20px', borderRadius: '50%',
@@ -92,7 +98,7 @@ export default function Scoreboard({ room, myUid }: Props) {
                   <div style={{
                     height: '100%', width: `${pct}%`,
                     background: pct >= 90
-                      ? 'linear-gradient(90deg,#f5c542,#ff9f43)'
+                      ? 'linear-gradient(90deg,#e6be68,#dfb15b)'
                       : `linear-gradient(90deg,${color},${color}aa)`,
                     borderRadius: '2px',
                     transition: 'width 0.5s ease',
@@ -112,8 +118,8 @@ export default function Scoreboard({ room, myUid }: Props) {
           {/* Draw pile */}
           <div style={{
             flex: 1,
-            background: 'rgba(11,232,129,0.06)',
-            border: '1px solid rgba(11,232,129,0.2)',
+            background: 'rgba(16,185,129,0.08)',
+            border: '1px solid rgba(16,185,129,0.25)',
             borderRadius: '12px',
             padding: '0.6rem 0.5rem',
             display: 'flex', flexDirection: 'column',
@@ -128,14 +134,21 @@ export default function Scoreboard({ room, myUid }: Props) {
                   left: `${offset * 1}px`,
                   width: '32px', height: '44px',
                   background: offset === 0
-                    ? 'linear-gradient(135deg,#1a1a3e,#2a2a5e)'
+                    ? 'linear-gradient(135deg,#051a11,#0d2e20)'
                     : 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.12)',
+                  border: '1px solid rgba(230,190,104,0.4)',
                   borderRadius: '6px',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
                   {offset === 0 && (
-                    <span style={{ fontSize: '1rem' }}>🃏</span>
+                    <span style={{
+                      fontFamily: 'Cinzel, serif',
+                      fontSize: '0.85rem',
+                      fontWeight: 900,
+                      color: 'var(--den-gold)',
+                    }}>
+                      7
+                    </span>
                   )}
                 </div>
               ))}
@@ -201,8 +214,12 @@ export default function Scoreboard({ room, myUid }: Props) {
                 borderRadius: '6px',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                <span style={{ fontSize: '1rem' }}>
-                  {discard.length > 0 ? '🗑️' : '○'}
+                <span style={{
+                  fontSize: '0.75rem',
+                  fontWeight: 900,
+                  color: discard.length > 0 ? 'var(--den-red)' : 'var(--den-muted)',
+                }}>
+                  {discard.length > 0 ? 'OUT' : '—'}
                 </span>
               </div>
             </div>
@@ -216,7 +233,7 @@ export default function Scoreboard({ room, myUid }: Props) {
               fontSize: '0.6rem', color: 'var(--den-muted)',
               fontWeight: 700, letterSpacing: '0.06em', textAlign: 'center',
             }}>
-              DISCARD {discard.length > 0 && '👆'}
+              DISCARD
             </div>
           </div>
         </div>
@@ -227,7 +244,7 @@ export default function Scoreboard({ room, myUid }: Props) {
           paddingTop: '0.55rem', fontSize: '0.65rem',
           color: 'var(--den-muted)', textAlign: 'center', fontWeight: 600,
         }}>
-          🎯 First to 200 wins · Round {room.round}
+          First to 200 points wins · Round {room.round}
         </div>
       </div>
 
@@ -246,14 +263,14 @@ export default function Scoreboard({ room, myUid }: Props) {
           <div
             onClick={e => e.stopPropagation()}
             style={{
-              background: 'rgba(22,22,40,0.99)',
-              border: '2px solid rgba(255,77,109,0.4)',
+              background: 'rgba(13, 35, 25, 0.99)',
+              border: '2px solid rgba(239,68,68,0.4)',
               borderRadius: '22px',
               padding: '1.5rem',
               width: '100%', maxWidth: '480px',
               maxHeight: '80dvh',
               display: 'flex', flexDirection: 'column',
-              boxShadow: '0 0 40px rgba(255,77,109,0.2)',
+              boxShadow: '0 0 40px rgba(239,68,68,0.2)',
             }}
           >
             {/* Modal header */}
@@ -265,7 +282,7 @@ export default function Scoreboard({ room, myUid }: Props) {
                 fontSize: '1rem', color: 'var(--den-red)',
                 margin: 0, letterSpacing: '0.08em',
               }}>
-                🗑️ DISCARD PILE
+                DISCARD PILE
                 <span style={{
                   marginLeft: '0.6rem', fontSize: '0.75rem',
                   color: 'var(--den-muted)', fontFamily: 'Nunito, sans-serif',

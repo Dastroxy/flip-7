@@ -7,7 +7,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
-import type { GameRoom, PlayerState } from '../types/game';
+import type { GameRoom, PlayerState, GamePhase } from '../types/game';
 import { buildDeck, shuffle } from '../lib/deck';
 import { calculateHandScore, hasFlip7 } from '../lib/scoring';
 
@@ -323,7 +323,7 @@ export function useGameRoom(roomCode: string | null) {
         order.forEach(uid => { originalTotals[uid] = r.players[uid].totalScore; });
         const scoredThisTx = new Set<string>();
         const player = players[myUid];
-        let phase = r.phase;
+        let phase: GamePhase = r.phase;
         let pendingAction = r.pendingAction;
         let lastEvent = '';
         let winnerUid = r.winnerUid;
@@ -402,7 +402,7 @@ export function useGameRoom(roomCode: string | null) {
               players[myUid].totalScore = originalTotals[myUid] + rs;
               players[myUid].status = 'stayed';
               scoredThisTx.add(myUid);
-              lastEvent = `🎉 ${player.name} flipped 7! +15 bonus! Round over!`;
+              lastEvent = `${player.name} flipped 7! +15 bonus! Round over!`;
               order.forEach((uid) => {
                 if (uid !== myUid && players[uid].status === 'active') {
                   const urs = calculateHandScore(players[uid]);
@@ -452,7 +452,7 @@ export function useGameRoom(roomCode: string | null) {
             action: card.action!,
             sourcePlayerId: myUid,
             targetPlayerId: null,
-            cardsRemaining: card.action === 'flip_three' ? 3 : null,
+            cardsRemaining: card.action === 'flip_three' ? 3 : undefined,
           };
           phase = 'action_resolve';
           lastEvent = `${player.name} drew ${card.label}! Choose a target.`;
@@ -492,7 +492,7 @@ export function useGameRoom(roomCode: string | null) {
         players[myUid].roundScore = rs;
         players[myUid].totalScore = originalTotals[myUid] + rs;
         scoredThisTx.add(myUid);
-        let phase = r.phase;
+        let phase: GamePhase = r.phase;
         let winnerUid = r.winnerUid;
         const currentTurnIndex = advanceTurn(order, players, r.currentTurnIndex);
         const allDone = order.every((uid) => players[uid].status !== 'active');
@@ -558,14 +558,14 @@ export function useGameRoom(roomCode: string | null) {
             players[targetUid].roundScore = rs;
             players[targetUid].totalScore = originalTotals[targetUid] + rs;
             scoredThisTx.add(targetUid);
-            lastEvent = `🧊 ${players[targetUid].name} was FROZEN — banks ${rs} pts.`;
+            lastEvent = `${players[targetUid].name} was FROZEN — banks ${rs} pts.`;
           } else {
             lastEvent = `Freeze card discarded — target is no longer active.`;
           }
         } else if (pa.action === 'second_chance') {
           if (players[targetUid]?.status === 'active' && !players[targetUid].hasSecondChance) {
             players[targetUid].hasSecondChance = true;
-            lastEvent = `🍀 ${players[targetUid].name} received a SECOND CHANCE card.`;
+            lastEvent = `${players[targetUid].name} received a SECOND CHANCE card.`;
           } else if (players[targetUid]?.hasSecondChance) {
             lastEvent = `Second Chance discarded — ${players[targetUid].name} already has one.`;
           } else {
@@ -608,7 +608,7 @@ export function useGameRoom(roomCode: string | null) {
                     players[targetUid].modifierCards = [];
                     players[targetUid].actionCards = [];
                     discard = [...discard, ...bustedCards];
-                    lastEvent = `💥 ${players[targetUid].name} BUSTED during Flip Three!`;
+                    lastEvent = `${players[targetUid].name} BUSTED during Flip Three!`;
                     remaining = 0;
                   }
                 } else {
@@ -622,7 +622,7 @@ export function useGameRoom(roomCode: string | null) {
                     players[targetUid].totalScore = originalTotals[targetUid] + rs;
                     players[targetUid].status = 'stayed';
                     scoredThisTx.add(targetUid);
-                    lastEvent = `🎉 ${players[targetUid].name} FLIP 7 during Flip Three! Round over!`;
+                    lastEvent = `${players[targetUid].name} FLIP 7 during Flip Three! Round over!`;
                     order.forEach((uid) => {
                       if (uid !== targetUid && players[uid].status === 'active') {
                         const urs = calculateHandScore(players[uid]);

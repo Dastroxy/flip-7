@@ -42,10 +42,18 @@ export default function Game() {
       <div style={{
         minHeight: '100dvh', display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
-        gap: '1rem', color: 'var(--den-muted)',
+        gap: '1.25rem', color: 'var(--den-muted)',
       }}>
-        <div style={{ fontSize: '3rem' }}>🃏</div>
-        <span>Loading game...</span>
+        <div className="spinner" style={{
+          width: '36px', height: '36px',
+          border: '3px solid rgba(245,197,66,0.2)',
+          borderTopColor: 'var(--den-gold)',
+          borderRadius: '50%',
+          animation: 'spin 0.8s linear infinite',
+        }} />
+        <span style={{ fontSize: '0.9rem', fontWeight: 600, letterSpacing: '0.05em' }}>
+          Loading game...
+        </span>
       </div>
     );
   }
@@ -66,30 +74,58 @@ export default function Game() {
       {/* ── Top bar ── */}
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0.55rem 1rem',
+        padding: '0.6rem 1.25rem',
         borderBottom: '1px solid var(--den-border)',
-        background: 'rgba(13,13,26,0.95)',
+        background: 'rgba(6, 18, 12, 0.95)',
         backdropFilter: 'blur(12px)',
         position: 'sticky', top: 0, zIndex: 100,
-        flexShrink: 0, flexWrap: 'wrap', gap: '0.4rem',
+        flexShrink: 0, flexWrap: 'wrap', gap: '0.5rem',
       }}>
-        <h1 style={{
-          fontSize: '1rem', margin: 0,
-          background: 'linear-gradient(135deg,#f5c542,#ff9f43)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-        }}>
-          🃏 DAX'S DEN
-        </h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <div style={{
+            width: '24px', height: '24px',
+            borderRadius: '5px',
+            border: '1.5px solid var(--den-gold)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '0.8rem', fontWeight: 900,
+            color: 'var(--den-gold)',
+            fontFamily: 'Cinzel, serif',
+          }}>
+            7
+          </div>
+          <h1 style={{
+            fontSize: '1rem', margin: 0,
+            fontFamily: 'Cinzel, serif',
+            letterSpacing: '0.12em',
+            fontWeight: 900,
+            background: 'linear-gradient(135deg,#e6be68,#dfb15b)',
+            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+          }}>
+            FLIP 7
+          </h1>
+        </div>
 
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', fontSize: '0.72rem', flexWrap: 'wrap' }}>
-          <span style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '6px', padding: '0.25rem 0.55rem', fontWeight: 700 }}>
-            🎮 R{room.round}
+        <div style={{ display: 'flex', gap: '0.45rem', alignItems: 'center', fontSize: '0.72rem', flexWrap: 'wrap' }}>
+          <span style={{
+            background: 'rgba(255,255,255,0.06)', borderRadius: '6px',
+            padding: '0.25rem 0.55rem', fontWeight: 700,
+            color: 'var(--den-text)',
+          }}>
+            ROUND {room.round}
           </span>
-          <span style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '6px', padding: '0.25rem 0.55rem', fontWeight: 700, letterSpacing: '0.1em' }}>
-            🔑 {roomCode}
+          <span style={{
+            background: 'rgba(255,255,255,0.06)', borderRadius: '6px',
+            padding: '0.25rem 0.55rem', fontWeight: 800,
+            letterSpacing: '0.12em', color: 'var(--den-gold)',
+          }}>
+            {roomCode}
           </span>
-          <span style={{ background: 'rgba(11,232,129,0.1)', color: 'var(--den-green)', borderRadius: '6px', padding: '0.25rem 0.55rem', fontWeight: 700 }}>
-            🃏 {room.deck.length}
+          <span style={{
+            background: 'rgba(16,185,129,0.12)', color: '#10b981',
+            borderRadius: '6px', padding: '0.25rem 0.55rem',
+            fontWeight: 800,
+          }}>
+            DECK {room.deck.length}
           </span>
           {/* Discard pill — tappable */}
           <button
@@ -104,7 +140,7 @@ export default function Game() {
               cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem',
             }}
           >
-            🗑️ {room.discard.length}
+            DISCARD {room.discard.length}
             {topDiscard && <span>· {topDiscard.label}</span>}
           </button>
           {/* Scoreboard button */}
@@ -118,9 +154,10 @@ export default function Game() {
               color: 'var(--den-gold)',
               fontWeight: 800, fontSize: '0.72rem',
               cursor: 'pointer',
+              letterSpacing: '0.05em',
             }}
           >
-            📊
+            SCORES
           </button>
         </div>
       </div>
@@ -130,7 +167,7 @@ export default function Game() {
         flex: 1,
         overflowY: 'auto',
         WebkitOverflowScrolling: 'touch',
-        padding: '0.75rem',
+        padding: '0.85rem',
         minHeight: 0,
       }}>
         <div
@@ -156,7 +193,7 @@ export default function Game() {
       {/* ── Bottom action bar ── */}
       <div style={{
         borderTop: '1px solid var(--den-border)',
-        background: 'rgba(13,13,26,0.97)',
+        background: 'rgba(6, 18, 12, 0.97)',
         backdropFilter: 'blur(12px)',
         padding: '0.65rem 1rem',
         paddingBottom: 'max(0.65rem, env(safe-area-inset-bottom))',
@@ -184,7 +221,7 @@ export default function Game() {
                 opacity: Math.max(0.3, 1 - i * 0.15),
                 lineHeight: 1.3,
               }}>
-                {i === 0 ? '💬' : '·'} {e}
+                {i === 0 ? '•' : '·'} {e}
               </div>
             ))
           }
@@ -196,55 +233,55 @@ export default function Game() {
             isMyTurn ? (
               <>
                 <button className="btn-hit" onClick={handleHit} disabled={!canHit}
-                  style={{ minWidth: '80px', minHeight: '44px', fontSize: '0.95rem' }}>
-                  {processing ? '⏳' : '🃏'} HIT
+                  style={{ minWidth: '88px', minHeight: '44px', fontSize: '0.95rem', letterSpacing: '0.04em' }}>
+                  {processing ? 'HIT...' : 'HIT'}
                 </button>
                 <button className="btn-danger" onClick={handleStay} disabled={!canStay}
-                  style={{ minWidth: '80px', minHeight: '44px', fontSize: '0.95rem' }}>
-                  ✋ STAY
+                  style={{ minWidth: '88px', minHeight: '44px', fontSize: '0.95rem', letterSpacing: '0.04em' }}>
+                  STAY
                 </button>
               </>
             ) : (
               <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '0.5rem 0.9rem', fontSize: '0.82rem', color: 'var(--den-muted)', fontWeight: 600 }}>
-                ⏳ {room.players[activeUid]?.name}'s turn...
+                {room.players[activeUid]?.name}'s turn...
               </div>
             )
           )}
 
           {room.phase === 'dealing' && (
-            <div style={{ background: 'rgba(245,197,66,0.08)', borderRadius: '10px', padding: '0.5rem 0.9rem', color: 'var(--den-gold)', fontSize: '0.82rem', fontWeight: 700 }}>
-              🃏 Dealing...
+            <div style={{ background: 'rgba(230,190,104,0.1)', borderRadius: '10px', padding: '0.5rem 0.9rem', color: 'var(--den-gold)', fontSize: '0.82rem', fontWeight: 700 }}>
+              Dealing cards...
             </div>
           )}
 
           {room.phase === 'action_resolve' && room.pendingAction &&
             room.pendingAction.sourcePlayerId !== myUid && (
             <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '0.5rem 0.9rem', fontSize: '0.82rem', color: 'var(--den-muted)', fontWeight: 600 }}>
-              ⏳ {room.players[room.pendingAction.sourcePlayerId]?.name} is resolving...
+              {room.players[room.pendingAction.sourcePlayerId]?.name} is resolving action...
             </div>
           )}
 
           {room.phase === 'round_end' && isHost && (
             <button className="btn-primary" onClick={startNextRound}
               style={{ minHeight: '44px', padding: '0 1.25rem', fontSize: '0.95rem' }}>
-              ▶ Next Round
+              Next Round
             </button>
           )}
           {room.phase === 'round_end' && !isHost && (
             <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '0.5rem 0.9rem', color: 'var(--den-muted)', fontSize: '0.82rem', fontWeight: 600 }}>
-              ⏳ Waiting for host...
+              Waiting for host...
             </div>
           )}
 
           {room.phase === 'game_over' && isHost && (
             <button className="btn-primary" onClick={startGame}
               style={{ minHeight: '44px', padding: '0 1.25rem', fontSize: '0.95rem' }}>
-              🔄 Play Again
+              Play Again
             </button>
           )}
           {room.phase === 'game_over' && !isHost && (
             <div style={{ background: 'rgba(255,255,255,0.04)', borderRadius: '10px', padding: '0.5rem 0.9rem', color: 'var(--den-muted)', fontSize: '0.82rem', fontWeight: 600 }}>
-              ⏳ Waiting for host...
+              Waiting for host...
             </div>
           )}
         </div>
@@ -273,9 +310,9 @@ export default function Game() {
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h2 style={{ fontSize: '1rem', margin: 0 }}>📊 Scoreboard</h2>
+              <h2 style={{ fontSize: '1rem', margin: 0, fontFamily: 'Cinzel, serif', letterSpacing: '0.06em' }}>Scoreboard</h2>
               <button onClick={() => setShowScoreboard(false)}
-                style={{ background: 'none', color: 'var(--den-muted)', fontSize: '1.2rem', padding: '0.2rem 0.4rem', lineHeight: 1 }}>
+                style={{ background: 'none', color: 'var(--den-muted)', fontSize: '1.2rem', padding: '0.2rem 0.4rem', lineHeight: 1, border: 'none', cursor: 'pointer' }}>
                 ✕
               </button>
             </div>
@@ -307,9 +344,11 @@ export default function Game() {
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h2 style={{ fontSize: '1rem', margin: 0 }}>🗑️ Discard Pile ({room.discard.length})</h2>
+              <h2 style={{ fontSize: '1rem', margin: 0, fontFamily: 'Cinzel, serif', letterSpacing: '0.06em' }}>
+                Discard Pile ({room.discard.length})
+              </h2>
               <button onClick={() => setShowDiscard(false)}
-                style={{ background: 'none', color: 'var(--den-muted)', fontSize: '1.2rem', padding: '0.2rem 0.4rem', lineHeight: 1 }}>
+                style={{ background: 'none', color: 'var(--den-muted)', fontSize: '1.2rem', padding: '0.2rem 0.4rem', lineHeight: 1, border: 'none', cursor: 'pointer' }}>
                 ✕
               </button>
             </div>
@@ -325,11 +364,13 @@ export default function Game() {
                     {i === 0 && (
                       <span style={{
                         position: 'absolute', top: '-5px', right: '-5px',
-                        background: 'var(--den-gold)', color: '#1a1a2e',
-                        borderRadius: '50%', width: '14px', height: '14px',
+                        background: 'var(--den-gold)', color: '#06170f',
+                        borderRadius: '4px', padding: '0.1rem 0.3rem',
                         fontSize: '0.55rem', fontWeight: 900,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      }}>★</span>
+                        letterSpacing: '0.04em',
+                      }}>
+                        TOP
+                      </span>
                     )}
                   </div>
                 ))}

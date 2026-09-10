@@ -16,8 +16,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     async function initAuth() {
       // Reuse this tab's UID if already assigned in this session
-      const storedUid = sessionStorage.getItem('daxden_uid');
-      const storedToken = sessionStorage.getItem('daxden_token');
+      const storedUid = sessionStorage.getItem('flip7_uid') || sessionStorage.getItem('daxden_uid');
+      const storedToken = sessionStorage.getItem('flip7_token') || sessionStorage.getItem('daxden_token');
 
       if (storedUid && storedToken) {
         setUid(storedUid);
@@ -34,8 +34,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const newUid = result.user.uid;
       const token = await result.user.getIdToken();
 
-      sessionStorage.setItem('daxden_uid', newUid);
-      sessionStorage.setItem('daxden_token', token);
+      sessionStorage.setItem('flip7_uid', newUid);
+      sessionStorage.setItem('flip7_token', token);
 
       setUid(newUid);
       setReady(true);
