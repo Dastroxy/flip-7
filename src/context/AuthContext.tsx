@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { auth } from '../firebase';
-import { signInAnonymously } from 'firebase/auth';
+import { signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 
 interface AuthCtx {
   uid: string | null;
@@ -9,39 +9,85 @@ interface AuthCtx {
 
 const AuthContext = createContext<AuthCtx>({ uid: null, ready: false });
 
+function safeGetSession(key: string): string | null {
+  try {
+    return sessionStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function safeSetSession(key: string, value: string): void {
+  try {
+    sessionStorage.setItem(key, value);
+  } catch {}
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [uid, setUid] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    async function initAuth() {
-      // Reuse this tab's UID if already assigned in this session
-      const storedUid = sessionStorage.getItem('flip7_uid') || sessionStorage.getItem('daxden_uid');
-      const storedToken = sessionStorage.getItem('flip7_token') || sessionStorage.getItem('daxden_token');
+    let isMounted = true;
 
-      if (storedUid && storedToken) {
-        setUid(storedUid);
-        setReady(true);
-        return;
+    // Safety fallback: Never leave the app stuck on "Loading Flip 7..."
+    const safetyTimeout = setTimeout(() => {
+      if (isMounted) {
+        setReady((prev) => {
+          if (!prev) {
+            console.warn('[AuthContext] Auth init timeout reached, releasing ready state');
+            // If we don't have a UID yet, assign fallback
+            setUid((curr) => curr || safeGetSession('flip7_uid') || `user_${Date.now().toString(36)}`);
+            return true;
+          }
+          return prev;
+        });
       }
+    }, 4000);
 
-      // Force a fresh anonymous sign-in for this tab
-      try {
-        await auth.signOut();
-      } catch (_) {}
-
-      const result = await signInAnonymously(auth);
-      const newUid = result.user.uid;
-      const token = await result.user.getIdToken();
-
-      sessionStorage.setItem('flip7_uid', newUid);
-      sessionStorage.setItem('flip7_token', token);
-
-      setUid(newUid);
-      setReady(true);
+    // Check if we already have a cached session UID
+    const existingSessionUid = safeGetSession('flip7_uid');
+    if (existingSessionUid) {
+      setUid(existingSessionUid);
     }
 
-    initAuth();
+    // Subscribe to Firebase Auth state
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!isMounted) return;
+
+      if (user) {
+        safeSetSession('flip7_uid', user.uid);
+        setUid(user.uid);
+        setReady(true);
+        clearTimeout(safetyTimeout);
+      } else {
+        // No authenticated user; sign in anonymously
+        try {
+          const cred = await signInAnonymously(auth);
+          if (isMounted) {
+            safeSetSession('flip7_uid', cred.user.uid);
+            setUid(cred.user.uid);
+            setReady(true);
+            clearTimeout(safetyTimeout);
+          }
+        } catch (err) {
+          console.error('[AuthContext] Anonymous sign-in failed:', err);
+          if (isMounted) {
+            const fallbackUid = safeGetSession('flip7_uid') || `guest_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`;
+            safeSetSession('flip7_uid', fallbackUid);
+            setUid(fallbackUid);
+            setReady(true);
+            clearTimeout(safetyTimeout);
+          }
+        }
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      clearTimeout(safetyTimeout);
+      unsubscribe();
+    };
   }, []);
 
   return (

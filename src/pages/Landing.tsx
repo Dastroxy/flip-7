@@ -60,7 +60,7 @@ export default function Landing() {
           <FlipSevenLogo
             size={116}
             style={{
-              filter: 'drop-shadow(0 12px 30px rgba(245, 158, 11, 0.45)) drop-shadow(0 4px 12px rgba(59, 130, 246, 0.35))',
+              filter: 'drop-shadow(0 8px 24px rgba(245, 158, 11, 0.45))',
             }}
           />
         </div>

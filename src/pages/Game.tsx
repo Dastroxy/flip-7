@@ -70,7 +70,14 @@ export default function Game() {
   const topDiscard = room.discard[room.discard.length - 1] ?? null;
 
   return (
-    <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <div style={{
+      height: '100vh',
+      maxHeight: '100dvh',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden',
+      position: 'relative',
+    }}>
 
       {/* ── Top bar ── */}
       <div style={{
@@ -196,24 +203,26 @@ export default function Game() {
       {/* ── Bottom action bar ── */}
       <div style={{
         borderTop: '1px solid var(--den-border)',
-        background: 'rgba(8, 23, 25, 0.97)',
+        background: 'rgba(10, 14, 23, 0.98)',
         backdropFilter: 'blur(12px)',
         padding: '0.65rem 1rem',
-        paddingBottom: 'max(0.65rem, env(safe-area-inset-bottom))',
+        paddingBottom: 'max(0.65rem, env(safe-area-inset-bottom, 0.65rem))',
         display: 'flex', alignItems: 'center',
         justifyContent: 'space-between',
-        gap: '0.75rem', flexShrink: 0, flexWrap: 'wrap',
+        gap: '0.6rem', flexShrink: 0,
+        zIndex: 90,
       }}>
 
-        {/* ── Last 6 events log ── */}
+        {/* ── Recent events log ── */}
         <div style={{
           flex: 1, minWidth: 0,
           display: 'flex', flexDirection: 'column',
           gap: '2px', overflow: 'hidden',
           justifyContent: 'center',
+          maxHeight: '44px',
         }}>
           {(room.recentEvents?.length ? [...room.recentEvents].reverse() : [room.lastEvent])
-            .slice(0, 6)
+            .slice(0, 2)
             .map((e, i) => (
               <div key={i} style={{
                 fontSize: i === 0 ? '0.78rem' : '0.68rem',
@@ -221,7 +230,7 @@ export default function Game() {
                 fontStyle: 'italic',
                 fontWeight: i === 0 ? 700 : 500,
                 overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                opacity: Math.max(0.3, 1 - i * 0.15),
+                opacity: Math.max(0.4, 1 - i * 0.25),
                 lineHeight: 1.3,
               }}>
                 {i === 0 ? '•' : '·'} {e}

@@ -53,14 +53,35 @@ export default function Lobby() {
   const shareUrl = `${window.location.origin}/?join=${roomCode}`;
 
   function copyLink() {
-    navigator.clipboard.writeText(shareUrl).catch(() => {
+    try {
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2500);
+        }).catch(() => {
+          fallbackCopy();
+        });
+        return;
+      }
+    } catch (_) {}
+    fallbackCopy();
+  }
+
+  function fallbackCopy() {
+    try {
       const el = document.createElement('textarea');
       el.value = shareUrl;
+      el.setAttribute('readonly', '');
+      el.style.position = 'fixed';
+      el.style.left = '-9999px';
+      el.style.top = '0';
       document.body.appendChild(el);
+      el.focus();
       el.select();
+      el.setSelectionRange(0, 99999);
       document.execCommand('copy');
       document.body.removeChild(el);
-    });
+    } catch (_) {}
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   }
@@ -83,7 +104,7 @@ export default function Lobby() {
             <FlipSevenLogo
               size={88}
               style={{
-                filter: 'drop-shadow(0 8px 24px rgba(245, 158, 11, 0.4)) drop-shadow(0 4px 10px rgba(59, 130, 246, 0.3))',
+                filter: 'drop-shadow(0 6px 18px rgba(245, 158, 11, 0.45))',
               }}
             />
           </div>
