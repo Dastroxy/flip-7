@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { GameRoom, GameCard } from '../types/game';
 import Card from './Card';
+import FlipSevenLogo from './FlipSevenLogo';
 
 interface Props {
   room: GameRoom;
@@ -17,7 +18,7 @@ function getAvatarColor(name: string) {
   return avatarColors[Math.abs(hash) % avatarColors.length];
 }
 
-const rankColors = ['#e6be68', '#94a3b8', '#b45309'];
+const rankColors = ['#EF6C4A', '#FFD23F', '#5DADE2'];
 
 export default function Scoreboard({ room, myUid }: Props) {
   const [showDiscard, setShowDiscard] = useState(false);
@@ -31,7 +32,7 @@ export default function Scoreboard({ room, myUid }: Props) {
   return (
     <>
       <div style={{
-        background: 'rgba(13, 35, 25, 0.95)',
+        background: 'rgba(13, 37, 39, 0.95)',
         border: '1px solid var(--den-border)',
         borderRadius: '16px',
         padding: '0.85rem',
@@ -54,10 +55,10 @@ export default function Scoreboard({ room, myUid }: Props) {
             return (
               <div key={p.uid} style={{
                 background: p.uid === myUid
-                  ? 'rgba(230,190,104,0.08)' : 'rgba(255,255,255,0.03)',
+                  ? 'rgba(43, 168, 162, 0.12)' : 'rgba(255,255,255,0.03)',
                 borderRadius: '10px', padding: '0.4rem 0.6rem',
                 border: p.uid === myUid
-                  ? '1px solid rgba(230,190,104,0.25)' : '1px solid transparent',
+                  ? '1px solid rgba(43, 168, 162, 0.35)' : '1px solid transparent',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '4px' }}>
                   <span style={{
@@ -98,7 +99,7 @@ export default function Scoreboard({ room, myUid }: Props) {
                   <div style={{
                     height: '100%', width: `${pct}%`,
                     background: pct >= 90
-                      ? 'linear-gradient(90deg,#e6be68,#dfb15b)'
+                      ? 'linear-gradient(90deg, #FFD23F, #FFE082)'
                       : `linear-gradient(90deg,${color},${color}aa)`,
                     borderRadius: '2px',
                     transition: 'width 0.5s ease',
@@ -118,44 +119,20 @@ export default function Scoreboard({ room, myUid }: Props) {
           {/* Draw pile */}
           <div style={{
             flex: 1,
-            background: 'rgba(16,185,129,0.08)',
-            border: '1px solid rgba(16,185,129,0.25)',
+            background: 'rgba(39, 174, 96, 0.08)',
+            border: '1px solid rgba(39, 174, 96, 0.25)',
             borderRadius: '12px',
             padding: '0.6rem 0.5rem',
             display: 'flex', flexDirection: 'column',
             alignItems: 'center', gap: '0.3rem',
           }}>
             {/* Stacked card visual */}
-            <div style={{ position: 'relative', width: '36px', height: '48px' }}>
-              {[2, 1, 0].map(offset => (
-                <div key={offset} style={{
-                  position: 'absolute',
-                  top: `${offset * 2}px`,
-                  left: `${offset * 1}px`,
-                  width: '32px', height: '44px',
-                  background: offset === 0
-                    ? 'linear-gradient(135deg,#051a11,#0d2e20)'
-                    : 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(230,190,104,0.4)',
-                  borderRadius: '6px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  {offset === 0 && (
-                    <span style={{
-                      fontFamily: 'Cinzel, serif',
-                      fontSize: '0.85rem',
-                      fontWeight: 900,
-                      color: 'var(--den-gold)',
-                    }}>
-                      7
-                    </span>
-                  )}
-                </div>
-              ))}
+            <div style={{ position: 'relative', width: '38px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <FlipSevenLogo size={46} style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.5))' }} />
             </div>
             <div style={{
               fontWeight: 900, fontSize: '1.1rem',
-              background: 'linear-gradient(135deg,#0be881,#00d2d3)',
+              background: 'linear-gradient(135deg, #2ECC71, #27AE60)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
             }}>
               {room.deck.length}
@@ -173,8 +150,8 @@ export default function Scoreboard({ room, myUid }: Props) {
             onClick={() => discard.length > 0 && setShowDiscard(true)}
             style={{
               flex: 1,
-              background: 'rgba(255,77,109,0.06)',
-              border: '1px solid rgba(255,77,109,0.2)',
+              background: 'rgba(239, 108, 74, 0.08)',
+              border: '1px solid rgba(239, 108, 74, 0.25)',
               borderRadius: '12px',
               padding: '0.6rem 0.5rem',
               display: 'flex', flexDirection: 'column',
@@ -263,14 +240,14 @@ export default function Scoreboard({ room, myUid }: Props) {
           <div
             onClick={e => e.stopPropagation()}
             style={{
-              background: 'rgba(13, 35, 25, 0.99)',
-              border: '2px solid rgba(239,68,68,0.4)',
+              background: 'rgba(13, 37, 39, 0.99)',
+              border: '2px solid rgba(239, 108, 74, 0.4)',
               borderRadius: '22px',
               padding: '1.5rem',
               width: '100%', maxWidth: '480px',
               maxHeight: '80dvh',
               display: 'flex', flexDirection: 'column',
-              boxShadow: '0 0 40px rgba(239,68,68,0.2)',
+              boxShadow: '0 0 40px rgba(239, 108, 74, 0.25)',
             }}
           >
             {/* Modal header */}
@@ -279,13 +256,13 @@ export default function Scoreboard({ room, myUid }: Props) {
               justifyContent: 'space-between', marginBottom: '1rem',
             }}>
               <h2 style={{
-                fontSize: '1rem', color: 'var(--den-red)',
+                fontSize: '1rem', color: 'var(--den-coral)',
                 margin: 0, letterSpacing: '0.08em',
               }}>
                 DISCARD PILE
                 <span style={{
                   marginLeft: '0.6rem', fontSize: '0.75rem',
-                  color: 'var(--den-muted)', fontFamily: 'Nunito, sans-serif',
+                  color: 'var(--den-muted)', fontFamily: 'Space Grotesk, sans-serif',
                   fontWeight: 700,
                 }}>
                   {discard.length} card{discard.length !== 1 ? 's' : ''}

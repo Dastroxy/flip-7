@@ -1,31 +1,47 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Nunito:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 :root {
-  --den-bg: #06120c;
-  --den-surface: #0d2319;
-  --den-felt: #091911;
-  --den-gold: #e6be68;
-  --den-gold-light: #fef0d2;
-  --den-text: #f0f7f3;
-  --den-muted: #7ca390;
-  --den-border: #1b4533;
-  --den-red: #ef4444;
-  --den-blue: #38bdf8;
-  --den-purple: #c084fc;
-  --den-teal: #14b8a6;
-  --den-green: #10b981;
+  /* Midnight Arcade Table - Canvas & Surfaces */
+  --den-bg: #0A0E17;
+  --den-surface: #111827;
+  --den-surface-2: #1F2937;
+  --den-container: #1C1F29;
+  --den-felt: #0E131D;
 
-  /* Number card colours */
-  --c0: #475569;
-  --c1: #e11d48;
-  --c2: #ea580c;
-  --c3: #f59e0b;
-  --c4: #059669;
-  --c5: #0891b2;
-  --c6: #2563eb;
-  --c7: #7c3aed;
-  --c8: #dc2626;
-  --c9: #db2777;
+  /* Typography Colors */
+  --den-text: #DFE2EF;
+  --den-muted: #94A3B8;
+  --den-border: rgba(255, 255, 255, 0.08);
+  --den-border-bright: rgba(255, 255, 255, 0.16);
+
+  /* Neon Signatures */
+  --den-gold: #F59E0B;
+  --den-gold-light: #FBBF24;
+  --den-gold-dark: #D97706;
+  --den-cyan: #06B6D4;
+  --den-cyan-bright: #4CD7F6;
+  --den-teal: #06B6D4;
+  --den-teal-hover: #4CD7F6;
+  --den-coral: #EF4444;
+  --den-green: #10B981;
+  --den-purple: #8B5CF6;
+  --den-orange: #F97316;
+  --den-cream: #FFF8E7;
+  --den-sky: #4CD7F6;
+  --den-red: #EF4444;
+  --den-blue: #3B82F6;
+
+  /* Number card neon signature accents */
+  --c0: #94A3B8;
+  --c1: #F43F5E;
+  --c2: #06B6D4;
+  --c3: #F59E0B;
+  --c4: #10B981;
+  --c5: #F97316;
+  --c6: #3B82F6;
+  --c7: #FBBF24;
+  --c8: #A855F7;
+  --c9: #EC4899;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -42,7 +58,7 @@ body {
   width: 100%;
   background: var(--den-bg);
   color: var(--den-text);
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Outfit', sans-serif;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
 }
@@ -54,138 +70,149 @@ body {
   z-index: 1;
 }
 
-/* Ambient velvet emerald table glow */
+/* Atmospheric Midnight Table Felt Lighting */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse at 25% 45%, rgba(16, 185, 129, 0.12) 0%, transparent 60%),
-    radial-gradient(ellipse at 75% 20%, rgba(230, 190, 104, 0.09) 0%, transparent 55%),
-    radial-gradient(ellipse at 50% 85%, rgba(5, 150, 105, 0.10) 0%, transparent 50%);
+    radial-gradient(ellipse at 50% 30%, #161F30 0%, #0A0E17 100%),
+    radial-gradient(circle at 15% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 85% 20%, rgba(245, 158, 11, 0.09) 0%, transparent 40%);
   pointer-events: none;
   z-index: 0;
 }
 
-h1, h2, h3 {
-  font-family: 'Cinzel', serif;
-  color: var(--den-gold);
-  letter-spacing: 0.05em;
+h1, h2, h3, h4 {
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--den-text);
+  letter-spacing: -0.02em;
 }
 
 button {
   cursor: pointer;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   border: none;
   outline: none;
   touch-action: manipulation;
 }
 
-input { font-family: 'Nunito', sans-serif; }
+input { font-family: 'Outfit', sans-serif; }
+
+/* Telemetry and HUD */
+.font-mono-hud {
+  font-family: 'JetBrains Mono', monospace;
+}
 
 /* Remove blue tap highlight on mobile */
 * { -webkit-tap-highlight-color: transparent; }
 
-/* ── Buttons ── */
+/* ── Buttons (Midnight Arcade Table) ── */
 .btn-primary {
-  background: linear-gradient(135deg, #dfb15b, #f3d48d);
-  color: #06170f;
-  font-weight: 900;
+  background: linear-gradient(180deg, #FBBF24 0%, #F59E0B 100%);
+  color: #0A0E17;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
   padding: 0.75rem 2rem;
-  border-radius: 50px;
+  border-radius: 9999px;
   font-size: 1rem;
-  letter-spacing: 0.04em;
+  letter-spacing: -0.01em;
   transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 4px 20px rgba(223, 177, 91, 0.35);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
   min-height: 44px;
 }
-.btn-primary:hover  { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 28px rgba(223, 177, 91, 0.5); }
-.btn-primary:active { transform: scale(0.97); }
-.btn-primary:disabled { opacity: 0.4; transform: none; cursor: not-allowed; }
+.btn-primary:hover  { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 26px rgba(245, 158, 11, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.5); }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.35; transform: none; cursor: not-allowed; box-shadow: none; }
 
 .btn-secondary {
-  background: rgba(223, 177, 91, 0.07);
-  border: 2px solid var(--den-gold);
-  color: var(--den-gold);
-  font-weight: 800;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1.5px solid var(--den-cyan);
+  color: var(--den-cyan-bright);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
   padding: 0.65rem 1.5rem;
-  border-radius: 50px;
+  border-radius: 9999px;
   font-size: 0.95rem;
-  transition: background 0.15s, color 0.15s, transform 0.1s;
+  transition: background 0.15s, color 0.15s, transform 0.1s, box-shadow 0.15s;
   min-height: 44px;
 }
-.btn-secondary:hover  { background: var(--den-gold); color: #06170f; transform: translateY(-2px); }
-.btn-secondary:active { transform: scale(0.97); }
+.btn-secondary:hover  { background: rgba(6, 182, 212, 0.25); color: #FFFFFF; transform: translateY(-2px); box-shadow: 0 0 16px rgba(6, 182, 212, 0.35); }
+.btn-secondary:active { transform: scale(0.98); }
 
 .btn-danger {
-  background: linear-gradient(135deg, #ef4444, #b91c1c);
-  color: #fff;
-  font-weight: 900;
+  background: rgba(239, 68, 68, 0.14);
+  border: 1.5px solid var(--den-coral);
+  color: #EF4444;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
   padding: 0.75rem 2rem;
-  border-radius: 50px;
+  border-radius: 9999px;
   font-size: 1rem;
-  transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.35);
+  letter-spacing: -0.01em;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2);
   min-height: 44px;
 }
-.btn-danger:hover  { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 28px rgba(239, 68, 68, 0.5); }
-.btn-danger:active { transform: scale(0.97); }
-.btn-danger:disabled { opacity: 0.4; transform: none; cursor: not-allowed; }
+.btn-danger:hover  { background: rgba(239, 68, 68, 0.25); color: #FFFFFF; transform: translateY(-2px); box-shadow: 0 6px 24px rgba(239, 68, 68, 0.4); }
+.btn-danger:active { transform: scale(0.98); }
+.btn-danger:disabled { opacity: 0.35; transform: none; cursor: not-allowed; }
 
 .btn-hit {
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: #06170f;
-  font-weight: 900;
+  background: linear-gradient(180deg, #FBBF24 0%, #F59E0B 100%);
+  color: #0A0E17;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
   padding: 0.75rem 2.5rem;
-  border-radius: 50px;
+  border-radius: 9999px;
   font-size: 1.1rem;
   transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
-  letter-spacing: 0.06em;
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.02em;
   min-height: 44px;
 }
-.btn-hit:hover  { transform: translateY(-3px) scale(1.03); box-shadow: 0 8px 28px rgba(16, 185, 129, 0.55); }
-.btn-hit:active { transform: scale(0.97); }
-.btn-hit:disabled { opacity: 0.35; transform: none; cursor: not-allowed; }
+.btn-hit:hover  { transform: translateY(-2px) scale(1.02); box-shadow: 0 8px 30px rgba(245, 158, 11, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.6); }
+.btn-hit:active { transform: scale(0.98); }
+.btn-hit:disabled { opacity: 0.35; transform: none; cursor: not-allowed; box-shadow: none; }
 
 /* ── Inputs ── */
 .input-field {
-  background: rgba(255,255,255,0.05);
-  border: 2px solid var(--den-border);
-  border-radius: 14px;
+  background: #111827;
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
   color: var(--den-text);
   padding: 0.75rem 1.1rem;
   font-size: 1rem;
   width: 100%;
-  transition: border-color 0.2s, background 0.2s;
-  font-weight: 600;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-weight: 500;
 }
 .input-field:focus {
-  border-color: var(--den-gold);
+  border-color: var(--den-cyan);
   outline: none;
-  background: rgba(255,255,255,0.09);
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.3);
 }
 
-/* ── Surfaces ── */
+/* ── Surfaces (Midnight Arcade Table) ── */
 .card-surface {
-  background: rgba(13, 35, 25, 0.95);
-  border: 1px solid var(--den-border);
-  border-radius: 20px;
-  padding: 1.75rem;
-  backdrop-filter: blur(12px);
+  background: #111827;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6);
 }
 
 .glass-surface {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  backdrop-filter: blur(8px);
+  background: #1F2937;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
 }
 
 /* ── Glow effects ── */
-.glow-gold { box-shadow: 0 0 20px rgba(230, 190, 104, 0.45), 0 0 50px rgba(230, 190, 104, 0.18); }
-.glow-green { box-shadow: 0 0 20px rgba(16, 185, 129, 0.45), 0 0 50px rgba(16, 185, 129, 0.18); }
-.glow-red   { box-shadow: 0 0 20px rgba(239, 68, 68, 0.45), 0 0 50px rgba(239, 68, 68, 0.18); }
+.glow-gold { box-shadow: 0 0 20px rgba(245, 158, 11, 0.35), 0 0 45px rgba(245, 158, 11, 0.15); }
+.glow-green { box-shadow: 0 0 20px rgba(16, 185, 129, 0.35), 0 0 45px rgba(16, 185, 129, 0.15); }
+.glow-red   { box-shadow: 0 0 20px rgba(239, 68, 68, 0.4), 0 0 45px rgba(239, 68, 68, 0.15); }
+.glow-teal  { box-shadow: 0 0 20px rgba(6, 182, 212, 0.35), 0 0 45px rgba(6, 182, 212, 0.15); }
 
 /* ── Animations ── */
 .animate-pulse-slow { animation: pulseSlow 2s ease-in-out infinite; }

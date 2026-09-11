@@ -10,10 +10,10 @@ interface Props {
 const actionInfo: Record<string, { title: string; desc: string; color: string; icon: ReactNode }> = {
   freeze: {
     title: 'FREEZE',
-    color: '#38bdf8',
+    color: '#5DADE2',
     desc: 'Target player banks their current round score and exits the round safely.',
     icon: (
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5DADE2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
         <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
       </svg>
@@ -21,10 +21,10 @@ const actionInfo: Record<string, { title: string; desc: string; color: string; i
   },
   flip_three: {
     title: 'FLIP THREE',
-    color: '#c084fc',
+    color: '#2BA8A2',
     desc: 'Target player must flip 3 consecutive cards from the draw deck.',
     icon: (
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#c084fc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2BA8A2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="7" width="14" height="14" rx="2" />
         <path d="M6 3h14a2 2 0 0 1 2 2v12" />
       </svg>
@@ -32,10 +32,10 @@ const actionInfo: Record<string, { title: string; desc: string; color: string; i
   },
   second_chance: {
     title: 'SECOND CHANCE',
-    color: '#34d399',
+    color: '#27AE60',
     desc: 'Give this card to any active player as a one-time protection shield against busting.',
     icon: (
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#27AE60" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
       </svg>
     ),
@@ -46,7 +46,7 @@ export default function ActionModal({ room, myUid, onResolve }: Props) {
   const pa = room.pendingAction!;
   const info = actionInfo[pa.action] ?? {
     title: 'ACTION CARD',
-    color: '#f5c542',
+    color: '#FFD23F',
     desc: 'Resolve this action card.',
     icon: null,
   };
@@ -72,7 +72,7 @@ export default function ActionModal({ room, myUid, onResolve }: Props) {
         <button
           onClick={() => setMinimised(false)}
           style={{
-            background: 'rgba(13, 35, 25, 0.98)',
+            background: 'rgba(13, 37, 39, 0.98)',
             border: `2px solid ${info.color}`,
             borderRadius: '50px',
             padding: '0.55rem 1.2rem',
@@ -80,7 +80,7 @@ export default function ActionModal({ room, myUid, onResolve }: Props) {
             cursor: 'pointer',
             boxShadow: `0 0 20px ${info.color}55`,
             color: '#fff',
-            fontFamily: 'Nunito, sans-serif',
+            fontFamily: 'Space Grotesk, sans-serif',
             fontWeight: 800,
             fontSize: '0.9rem',
             animation: 'pulseSlow 1.8s ease-in-out infinite',
@@ -88,7 +88,7 @@ export default function ActionModal({ room, myUid, onResolve }: Props) {
         >
           <span style={{ color: info.color }}>{info.title}</span>
           <span style={{
-            background: info.color, color: '#06170f',
+            background: info.color, color: '#081719',
             borderRadius: '20px', padding: '0.15rem 0.6rem',
             fontSize: '0.72rem', fontWeight: 900, letterSpacing: '0.04em',
           }}>
@@ -109,7 +109,7 @@ export default function ActionModal({ room, myUid, onResolve }: Props) {
       zIndex: 1000, padding: '1rem',
     }}>
       <div style={{
-        background: 'rgba(13, 35, 25, 0.98)',
+        background: 'rgba(13, 37, 39, 0.98)',
         border: `2px solid ${info.color}`,
         borderRadius: '24px',
         padding: '2rem 1.75rem',
@@ -225,7 +225,7 @@ export default function ActionModal({ room, myUid, onResolve }: Props) {
                       width: '26px', height: '26px', borderRadius: '50%',
                       background: info.color,
                       display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '0.75rem', fontWeight: 900, color: '#06170f',
+                      fontSize: '0.75rem', fontWeight: 900, color: '#081719',
                     }}>
                       {p.name[0].toUpperCase()}
                     </span>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useGameRoom } from '../hooks/useGameRoom';
+import FlipSevenLogo from '../components/FlipSevenLogo';
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -54,50 +55,35 @@ export default function Landing() {
         marginBottom: '2.25rem',
         width: '100%',
       }}>
-        {/* Emblem: stylized 7 card badge */}
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '64px',
-          height: '84px',
-          borderRadius: '12px',
-          background: 'linear-gradient(135deg, #072216, #0e3b27)',
-          border: '2px solid rgba(230,190,104,0.65)',
-          boxShadow: '0 8px 24px rgba(230,190,104,0.25), inset 0 1px 1px rgba(255,255,255,0.2)',
-          marginBottom: '1rem',
-          position: 'relative',
-        }}>
-          <span style={{
-            fontFamily: 'Cinzel, serif',
-            fontSize: '2.5rem',
-            fontWeight: 900,
-            background: 'linear-gradient(135deg,#e6be68,#fef0d2)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            lineHeight: 1,
-          }}>
-            7
-          </span>
+        {/* Game Logo */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.25rem' }}>
+          <FlipSevenLogo
+            size={116}
+            style={{
+              filter: 'drop-shadow(0 12px 30px rgba(245, 158, 11, 0.45)) drop-shadow(0 4px 12px rgba(59, 130, 246, 0.35))',
+            }}
+          />
         </div>
 
         <h1 style={{
           fontSize: 'clamp(2.4rem, 9vw, 3.8rem)',
           lineHeight: 1.05,
-          letterSpacing: '0.08em',
-          background: 'linear-gradient(135deg,#e6be68 0%,#dfb15b 50%,#fef0d2 100%)',
+          letterSpacing: '-0.02em',
+          fontWeight: 800,
+          background: 'linear-gradient(180deg, #FFFFFF 0%, #E2E8F0 60%, #94A3B8 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
         }}>
           FLIP 7
         </h1>
         <p style={{
-          color: 'var(--den-muted)',
+          color: 'var(--den-cyan-bright)',
           marginTop: '0.5rem',
           fontSize: 'clamp(0.72rem, 2.5vw, 0.88rem)',
-          letterSpacing: '0.22em',
-          fontWeight: 800,
+          letterSpacing: '0.18em',
+          fontWeight: 700,
           textTransform: 'uppercase',
+          fontFamily: 'Space Grotesk, sans-serif',
         }}>
           Press-Your-Luck Card Game
         </p>
@@ -129,8 +115,8 @@ export default function Landing() {
               width: '38px',
               height: '50px',
               borderRadius: '8px',
-              background: 'linear-gradient(135deg,#0d3625,#144f37)',
-              border: '1px solid rgba(230,190,104,0.4)',
+              background: 'linear-gradient(135deg, #091D1F, #0F3235)',
+              border: '1px solid rgba(255, 210, 63, 0.4)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -149,8 +135,8 @@ export default function Landing() {
             </div>
             <span style={{
               fontSize: '0.65rem',
-              background: 'rgba(16,185,129,0.15)',
-              color: '#10b981',
+              background: 'rgba(39, 174, 96, 0.15)',
+              color: '#27AE60',
               borderRadius: '6px',
               padding: '0.2rem 0.55rem',
               fontWeight: 800,
@@ -205,11 +191,11 @@ export default function Landing() {
 
           {error && (
             <div style={{
-              background: 'rgba(255,77,109,0.12)',
-              border: '1px solid var(--den-red)',
+              background: 'rgba(239, 108, 74, 0.12)',
+              border: '1px solid var(--den-coral)',
               borderRadius: '10px',
               padding: '0.65rem 1rem',
-              color: 'var(--den-red)',
+              color: 'var(--den-coral)',
               fontSize: '0.88rem',
               marginBottom: '1rem',
               fontWeight: 600,

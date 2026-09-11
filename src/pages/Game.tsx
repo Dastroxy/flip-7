@@ -6,6 +6,7 @@ import Scoreboard from '../components/Scoreboard';
 import ActionModal from '../components/ActionModal';
 import WinOverlay from '../components/WinOverlay';
 import Card from '../components/Card';
+import FlipSevenLogo from '../components/FlipSevenLogo';
 
 export default function Game() {
   const { roomCode } = useParams<{ roomCode: string }>();
@@ -74,56 +75,60 @@ export default function Game() {
       {/* ── Top bar ── */}
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0.6rem 1.25rem',
-        borderBottom: '1px solid var(--den-border)',
-        background: 'rgba(6, 18, 12, 0.95)',
-        backdropFilter: 'blur(12px)',
+        padding: '0.65rem 1.25rem',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        background: 'rgba(10, 14, 23, 0.95)',
+        backdropFilter: 'blur(16px)',
         position: 'sticky', top: 0, zIndex: 100,
         flexShrink: 0, flexWrap: 'wrap', gap: '0.5rem',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-          <div style={{
-            width: '24px', height: '24px',
-            borderRadius: '5px',
-            border: '1.5px solid var(--den-gold)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '0.8rem', fontWeight: 900,
-            color: 'var(--den-gold)',
-            fontFamily: 'Cinzel, serif',
-          }}>
-            7
-          </div>
+          <FlipSevenLogo
+            size={34}
+            style={{
+              filter: 'drop-shadow(0 0 8px rgba(245, 158, 11, 0.4))',
+            }}
+          />
           <h1 style={{
-            fontSize: '1rem', margin: 0,
-            fontFamily: 'Cinzel, serif',
-            letterSpacing: '0.12em',
-            fontWeight: 900,
-            background: 'linear-gradient(135deg,#e6be68,#dfb15b)',
+            fontSize: '1.1rem', margin: 0,
+            fontFamily: 'Space Grotesk, sans-serif',
+            letterSpacing: '-0.02em',
+            fontWeight: 800,
+            background: 'linear-gradient(135deg, #FBBF24, #F59E0B)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
           }}>
             FLIP 7
           </h1>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.45rem', alignItems: 'center', fontSize: '0.72rem', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '0.45rem', alignItems: 'center', fontSize: '0.75rem', flexWrap: 'wrap' }}>
           <span style={{
-            background: 'rgba(255,255,255,0.06)', borderRadius: '6px',
-            padding: '0.25rem 0.55rem', fontWeight: 700,
+            background: 'rgba(255, 255, 255, 0.06)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: '9999px',
+            padding: '0.25rem 0.65rem', fontWeight: 700,
+            fontFamily: 'JetBrains Mono, monospace',
             color: 'var(--den-text)',
           }}>
-            ROUND {room.round}
+            RND {room.round}
           </span>
           <span style={{
-            background: 'rgba(255,255,255,0.06)', borderRadius: '6px',
-            padding: '0.25rem 0.55rem', fontWeight: 800,
-            letterSpacing: '0.12em', color: 'var(--den-gold)',
+            background: 'rgba(245, 158, 11, 0.12)',
+            border: '1px solid rgba(245, 158, 11, 0.3)',
+            borderRadius: '9999px',
+            padding: '0.25rem 0.65rem', fontWeight: 700,
+            fontFamily: 'JetBrains Mono, monospace',
+            letterSpacing: '0.05em', color: 'var(--den-gold)',
           }}>
             {roomCode}
           </span>
           <span style={{
-            background: 'rgba(16,185,129,0.12)', color: '#10b981',
-            borderRadius: '6px', padding: '0.25rem 0.55rem',
-            fontWeight: 800,
+            background: 'rgba(16, 185, 129, 0.12)',
+            border: '1px solid rgba(16, 185, 129, 0.3)',
+            color: '#10B981',
+            borderRadius: '9999px', padding: '0.25rem 0.65rem',
+            fontFamily: 'JetBrains Mono, monospace',
+            fontWeight: 700,
           }}>
             DECK {room.deck.length}
           </span>
@@ -131,30 +136,28 @@ export default function Game() {
           <button
             onClick={() => setShowDiscard(true)}
             style={{
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid var(--den-border)',
-              borderRadius: '6px',
-              padding: '0.25rem 0.55rem',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              borderRadius: '9999px',
+              padding: '0.25rem 0.65rem',
               color: 'var(--den-muted)',
-              fontWeight: 700, fontSize: '0.72rem',
+              fontFamily: 'JetBrains Mono, monospace',
+              fontWeight: 700, fontSize: '0.75rem',
               cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem',
             }}
           >
             DISCARD {room.discard.length}
-            {topDiscard && <span>· {topDiscard.label}</span>}
+            {topDiscard && <span style={{ color: 'var(--den-cyan-bright)' }}>· {topDiscard.label}</span>}
           </button>
           {/* Scoreboard button */}
           <button
             onClick={() => setShowScoreboard(true)}
+            className="btn-secondary"
             style={{
-              background: 'rgba(245,197,66,0.1)',
-              border: '1px solid rgba(245,197,66,0.3)',
-              borderRadius: '6px',
-              padding: '0.25rem 0.6rem',
-              color: 'var(--den-gold)',
-              fontWeight: 800, fontSize: '0.72rem',
-              cursor: 'pointer',
-              letterSpacing: '0.05em',
+              minHeight: '28px',
+              padding: '0.2rem 0.75rem',
+              fontSize: '0.75rem',
+              fontWeight: 700,
             }}
           >
             SCORES
@@ -193,7 +196,7 @@ export default function Game() {
       {/* ── Bottom action bar ── */}
       <div style={{
         borderTop: '1px solid var(--den-border)',
-        background: 'rgba(6, 18, 12, 0.97)',
+        background: 'rgba(8, 23, 25, 0.97)',
         backdropFilter: 'blur(12px)',
         padding: '0.65rem 1rem',
         paddingBottom: 'max(0.65rem, env(safe-area-inset-bottom))',
@@ -249,7 +252,7 @@ export default function Game() {
           )}
 
           {room.phase === 'dealing' && (
-            <div style={{ background: 'rgba(230,190,104,0.1)', borderRadius: '10px', padding: '0.5rem 0.9rem', color: 'var(--den-gold)', fontSize: '0.82rem', fontWeight: 700 }}>
+            <div style={{ background: 'rgba(255, 210, 63, 0.12)', borderRadius: '10px', padding: '0.5rem 0.9rem', color: 'var(--den-gold)', fontSize: '0.82rem', fontWeight: 700 }}>
               Dealing cards...
             </div>
           )}
@@ -301,16 +304,17 @@ export default function Game() {
           <div
             onClick={e => e.stopPropagation()}
             style={{
-              background: 'var(--den-surface)',
-              border: '1px solid var(--den-border)',
+              background: '#111827',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               borderRadius: '20px', padding: '1.25rem',
               width: '100%', maxWidth: '360px',
               maxHeight: '80vh', overflowY: 'auto',
               WebkitOverflowScrolling: 'touch',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.8)',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h2 style={{ fontSize: '1rem', margin: 0, fontFamily: 'Cinzel, serif', letterSpacing: '0.06em' }}>Scoreboard</h2>
+              <h2 style={{ fontSize: '1.1rem', margin: 0, fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '-0.01em' }}>Scoreboard</h2>
               <button onClick={() => setShowScoreboard(false)}
                 style={{ background: 'none', color: 'var(--den-muted)', fontSize: '1.2rem', padding: '0.2rem 0.4rem', lineHeight: 1, border: 'none', cursor: 'pointer' }}>
                 ✕
@@ -335,16 +339,17 @@ export default function Game() {
           <div
             onClick={e => e.stopPropagation()}
             style={{
-              background: 'var(--den-surface)',
-              border: '1px solid var(--den-border)',
+              background: '#111827',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               borderRadius: '20px', padding: '1.25rem',
               width: '100%', maxWidth: '420px',
               maxHeight: '80vh', overflowY: 'auto',
               WebkitOverflowScrolling: 'touch',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.8)',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h2 style={{ fontSize: '1rem', margin: 0, fontFamily: 'Cinzel, serif', letterSpacing: '0.06em' }}>
+              <h2 style={{ fontSize: '1.1rem', margin: 0, fontFamily: 'Space Grotesk, sans-serif', fontWeight: 700, letterSpacing: '-0.01em' }}>
                 Discard Pile ({room.discard.length})
               </h2>
               <button onClick={() => setShowDiscard(false)}
@@ -364,7 +369,7 @@ export default function Game() {
                     {i === 0 && (
                       <span style={{
                         position: 'absolute', top: '-5px', right: '-5px',
-                        background: 'var(--den-gold)', color: '#06170f',
+                        background: 'var(--den-gold)', color: '#081719',
                         borderRadius: '4px', padding: '0.1rem 0.3rem',
                         fontSize: '0.55rem', fontWeight: 900,
                         letterSpacing: '0.04em',

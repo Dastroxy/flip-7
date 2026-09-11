@@ -50,9 +50,9 @@ export default function WinOverlay({ room, myUid, onPlayAgain }: Props) {
             width: '76px',
             height: '76px',
             borderRadius: '50%',
-            background: 'rgba(230,190,104,0.12)',
+            background: 'rgba(255, 210, 63, 0.12)',
             border: '2px solid var(--den-gold)',
-            boxShadow: '0 0 35px rgba(230,190,104,0.35)',
+            boxShadow: '0 0 35px rgba(255, 210, 63, 0.35)',
             color: 'var(--den-gold)',
           }}>
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -70,7 +70,7 @@ export default function WinOverlay({ room, myUid, onPlayAgain }: Props) {
         <div style={{ width: '100%', maxWidth: '340px' }}>
           <h1 style={{
             fontSize: 'clamp(1.8rem, 6vw, 3rem)',
-            background: 'linear-gradient(135deg,#e6be68,#dfb15b,#fef0d2)',
+            background: 'linear-gradient(135deg, #FFD23F, #F3BA22, #FFF8E7)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
             marginBottom: '0.5rem', lineHeight: 1.2,
             letterSpacing: '0.04em',
@@ -88,7 +88,7 @@ export default function WinOverlay({ room, myUid, onPlayAgain }: Props) {
 
         {/* Final scoreboard */}
         <div style={{
-          background: 'rgba(255,255,255,0.04)',
+          background: 'rgba(13, 37, 39, 0.9)',
           border: '1px solid var(--den-border)',
           borderRadius: '16px',
           padding: '0.85rem 1.25rem',

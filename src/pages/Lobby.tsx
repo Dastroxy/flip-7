@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGameRoom } from '../hooks/useGameRoom';
+import FlipSevenLogo from '../components/FlipSevenLogo';
 
 const avatarColors = [
   '#ff4757','#ff9f43','#ffd32a','#0be881',
@@ -77,61 +78,52 @@ export default function Lobby() {
       <div className="card-surface" style={{ width: '100%', maxWidth: '480px' }}>
 
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '48px',
-            height: '62px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #072216, #0e3b27)',
-            border: '2px solid rgba(230,190,104,0.5)',
-            marginBottom: '0.75rem',
-          }}>
-            <span style={{
-              fontFamily: 'Cinzel, serif',
-              fontSize: '1.8rem',
-              fontWeight: 900,
-              color: 'var(--den-gold)',
-            }}>
-              7
-            </span>
+        <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.85rem' }}>
+            <FlipSevenLogo
+              size={88}
+              style={{
+                filter: 'drop-shadow(0 8px 24px rgba(245, 158, 11, 0.4)) drop-shadow(0 4px 10px rgba(59, 130, 246, 0.3))',
+              }}
+            />
           </div>
           <h1 style={{
-            fontSize: '1.85rem',
-            letterSpacing: '0.06em',
-            background: 'linear-gradient(135deg,#e6be68,#dfb15b)',
+            fontSize: '1.9rem',
+            letterSpacing: '-0.02em',
+            fontWeight: 800,
+            fontFamily: 'Space Grotesk, sans-serif',
+            background: 'linear-gradient(180deg, #FFFFFF 0%, #CBD5E1 100%)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
           }}>
             FLIP 7
           </h1>
-          <p style={{ color: 'var(--den-muted)', fontSize: '0.8rem', marginTop: '0.25rem', fontWeight: 700, letterSpacing: '0.15em' }}>
+          <p style={{ color: 'var(--den-cyan-bright)', fontSize: '0.8rem', marginTop: '0.25rem', fontWeight: 700, letterSpacing: '0.15em', fontFamily: 'Space Grotesk, sans-serif' }}>
             GAME LOBBY
           </p>
         </div>
 
         {/* Room code */}
         <div style={{
-          background: 'rgba(245,197,66,0.06)',
-          border: '1.5px dashed rgba(245,197,66,0.4)',
+          background: 'rgba(245, 158, 11, 0.08)',
+          border: '1.5px dashed rgba(245, 158, 11, 0.4)',
           borderRadius: '16px', padding: '1.1rem',
           textAlign: 'center', marginBottom: '1.5rem',
         }}>
-          <p style={{ fontSize: '0.72rem', color: 'var(--den-muted)', letterSpacing: '0.15em', marginBottom: '0.3rem', fontWeight: 800 }}>
+          <p style={{ fontSize: '0.72rem', color: 'var(--den-muted)', letterSpacing: '0.15em', marginBottom: '0.3rem', fontWeight: 800, fontFamily: 'Space Grotesk, sans-serif' }}>
             ROOM CODE
           </p>
           <p style={{
-            fontSize: '2.6rem', fontFamily: 'Cinzel, serif',
-            background: 'linear-gradient(135deg,#f5c542,#ffe88a)',
+            fontSize: '2.6rem', fontFamily: 'JetBrains Mono, monospace',
+            fontWeight: 800,
+            background: 'linear-gradient(180deg, #FBBF24 0%, #F59E0B 100%)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            letterSpacing: '0.3em', lineHeight: 1.1,
+            letterSpacing: '0.2em', lineHeight: 1.1,
           }}>
             {roomCode}
           </p>
           <button
             className="btn-secondary"
-            style={{ marginTop: '0.75rem', fontSize: '0.78rem', padding: '0.4rem 1rem' }}
+            style={{ marginTop: '0.75rem', fontSize: '0.82rem', padding: '0.45rem 1.25rem' }}
             onClick={copyLink}
           >
             {copied ? 'Copied to Clipboard!' : 'Copy Invite Link'}
@@ -153,10 +145,10 @@ export default function Lobby() {
                 <div key={p.uid} style={{
                   display: 'flex', alignItems: 'center', gap: '0.75rem',
                   background: p.uid === myUid
-                    ? 'rgba(245,197,66,0.07)' : 'rgba(255,255,255,0.03)',
+                    ? 'rgba(43, 168, 162, 0.12)' : 'rgba(255,255,255,0.03)',
                   borderRadius: '12px', padding: '0.65rem 1rem',
                   border: p.uid === myUid
-                    ? '1px solid rgba(245,197,66,0.25)' : '1px solid var(--den-border)',
+                    ? '1px solid rgba(43, 168, 162, 0.35)' : '1px solid var(--den-border)',
                   transition: 'border-color 0.2s',
                 }}>
                   <div style={{
